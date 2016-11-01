@@ -16,71 +16,13 @@ import java.util.Vector;
 public class Livelist extends JFrame {
     public JList list;
     public Vector<String> vec;
+
     private ImgPanel contentPane;
-    JButton listAdd;
-//    JButton
+    private Btns listAdd;
+    private Btns listSave;
+//    private JButton listAdd;
+//    private JButton listSave;
     private boolean isOdd;
-//    listLoader();
-//    public Livelist(String[] pre, Jplayer jP){
-////        PlayList = new Vector<String>();
-//////        Vector vt=new Vector();
-////        JList myList = new JList();
-////        PlayList.add("aaa.mp3");
-////        PlayList.add("bbb.mp3");
-//////        PlayList.set(3, "new one!");
-////        myList.setListData(PlayList);
-////        contentPane.add(myList);
-////        myList.setBounds(0,0, 600,300);
-//
-//        isOdd = true;
-//        vec = new Vector();
-//        int i = 0;
-//        for (i=0; i<pre.length; i++){
-//            vec.add(pre[i]);
-//        }
-//
-//        list = new JList(pre);
-//
-//        setTitle("Live-List");
-//        setVisible(true);
-//
-//        setResizable(false);
-//
-//
-//        setBounds(300, 200, 400, 435);
-//
-//        setContentPane(list);
-//
-//        list.addListSelectionListener(new ListSelectionListener() {
-//            public void valueChanged(ListSelectionEvent e) {
-//
-//                isOdd = !isOdd;
-//                if (isOdd){
-//                    System.out.println( vec.get(list.getSelectedIndex()) );
-////                    URL url = new URL(vec.get(list.getSelectedIndex()))
-////                    String targetFile = vec.get(list.getSelectedIndex());
-//
-//                    jP.path = vec.get(list.getSelectedIndex());
-//                    jP.jStatus.isPlay = false;
-//
-//                    if (jP.jStatus.isPlay){
-//                        jP.mediaPlayer.stop();
-//                    }
-//                    jP.thePlay();
-//                    jP.jStatus.isPlay = true;
-////                    jP.mediaPlayer.stop();
-//
-////                    jP.mediaPlayer.play();
-//
-//                }
-////                jp2other
-//            }
-//        });
-//
-//        setBackground(Color.WHITE);
-//        this.setVisible(true);
-//
-//    }
 
     public void listLoader(){
         vec = new Vector();
@@ -124,21 +66,17 @@ public class Livelist extends JFrame {
         vec = new Vector();
         listLoader();
 
-        System.out.println(vec.get(1));
+//        System.out.println(vec.get(1));
     }
 
     DefaultListModel<String> model;
     public Livelist(Jplayer jP){
-
         listLoader();
 
         list = new JList<>(model);
         isOdd = true;
 
 //        list = new JList(vec);
-
-
-
 
         setTitle("Live-List");
         setVisible(true);
@@ -173,21 +111,13 @@ public class Livelist extends JFrame {
         setBackground(Color.WHITE);
 
 
-
-        listAdd = new JButton("+ add");
-
+        listAdd = new Btns("+ add");
+//        listAdd = new JButton("+ add");
         listAdd.setBounds(0, 390, 80, 30);
         listAdd.setHorizontalAlignment(SwingConstants.CENTER);
         listAdd.setVerticalAlignment(SwingConstants.CENTER);
-
         listAdd.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-//                System.out.println("btn_playBtn click!");
-//                String myStr = JOptionPane.showInputDialog("新歌曲在硬盘中的位置：");
-                  // 弃用
-//                System.out.println("@@@@ From Graph @@@@ " + myStr);
-//                JFileChooser myFC = new JFileChooser();
-//                new FileChooser(listAdd);
                 JFileChooser jfc=new JFileChooser();
                 jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES );
                 jfc.showDialog(new JLabel(), "选择");
@@ -204,10 +134,17 @@ public class Livelist extends JFrame {
                 list.repaint();
             }
         });
-
+        listAdd.setVisible(true);
+        listAdd.repaint();
         list.add(listAdd);
+        list.setVisible(true);
+        list.repaint();
+
+//        listSave = new Btns("| save");
 
         this.setVisible(true);
+
+
     }
     JButton open;
 
