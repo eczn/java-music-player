@@ -119,8 +119,8 @@ public class Jplayer extends JFrame {
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
         {
-            title = new JLabel("jPlayer - FileName.mp3");
-
+//            title = new JLabel("jPlayer - FileName.mp3");
+            title = new JLabel("welcome to jPlayer - FileName.mp3");
             title.setForeground(Color.WHITE);
             title.setHorizontalAlignment(SwingConstants.CENTER);
             title.setVerticalAlignment(SwingConstants.CENTER);
@@ -139,10 +139,7 @@ public class Jplayer extends JFrame {
 
 //        j.setSize(300, 200);
 //        j.setVisible(true);
-
-
 //        playBtn = new JButton("play");
-
 //        ImageIcon pre = new ImageIcon(
 //                Jplayer.class.getResource("images/play_icon.png")
 //        );
@@ -227,8 +224,6 @@ public class Jplayer extends JFrame {
                 System.out.println("asd");
             }
         });
-
-
 
     }
 
