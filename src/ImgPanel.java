@@ -14,19 +14,22 @@ public class ImgPanel extends JPanel {
     private static BufferedImage default_image;
     public ImgPanel() {
         try {
-            URL url = ImgPanel.class.getResource("Logo.png");
+            URL url = ImgPanel.class.getResource("images/origin-dev.png");
             default_image = ImageIO.read(url);
+
             image=default_image;
 
         } catch (IOException ex) {
             // do nothing
+            System.out.println(ex);
+
         }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        Image tmp = image.getScaledInstance(536, 225, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(536, 225, BufferedImage.TYPE_INT_ARGB);
+        Image tmp = image.getScaledInstance(380, 435, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(380, 435, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = dimg.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
