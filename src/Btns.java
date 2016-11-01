@@ -9,17 +9,20 @@ public class Btns extends JButton {
     // [1]: onClicked Status Icon src
     // [2]: Hover Status Icon src
     protected URL[] imgSrc;
+//    protected Image[] imgs;
     public String btnName;
+    public boolean justText;
     public Btns() { // construtor
 
     }
 
-    public Btns(ImageIcon ii){
-        super(ii);
-    }
-    public Btns(String test){
-        super(test);
-
+//    public Btns(ImageIcon ii){
+//        super(ii);
+//    }
+    public Btns(String text){
+        super(text);
+        btnName = text;
+        justText = true;
     }
 
 //    public Btns(String[] ImageSrc_output, String text){
@@ -30,66 +33,52 @@ public class Btns extends JButton {
         super(text);
         btnName = text;
         imgSrc = ImageSrc_output;
+        justText = false;
     }
 
-
-//    private Color startColor = new Color(24,116,205);
-//    private Color endColor = new Color(82, 82, 82);
-//    private Color pressedColor = new Color(204, 67, 0);
-//    private GradientPaint GP;
-
     protected void paintComponent(Graphics g) {
-        ButtonModel model = getModel();
-
-//        Color c = g.getColor();
-
-        g.clearRect(0,0,60,60);
-
-        if (model.isPressed()) {
-            System.out.print("!!");
-            Color c = new Color(0,0,0);
-            g.setColor(c);
-//            g.fillOval(100, 100, 50, 50);
-
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
-
-            Toolkit tool = this.getToolkit();
-            Image image = tool.getImage(imgSrc[1]);
-            g.drawImage(image, 0, 0, new Color(255,255,255), null);
-
-//            ImageObserver
-//            g.drawImag
-
-
+        if (justText){
+            g.drawString(btnName, 0,0);
         } else {
-            System.out.print("no");
-
-            Color c = new Color(120,120,120);
-            g.setColor(c);
-
+            System.out.println(btnName);
+            ButtonModel model = getModel();
             g.clearRect(0,0,60,60);
-            Toolkit tool = this.getToolkit();
-            Image image = tool.getImage(imgSrc[0]);
-            g.drawImage(image, 0, 0, new Color(255,255,255), null);
-        }
+            if (model.isPressed()) {
+                System.out.print("!!");
+                Color c = new Color(0,0,0);
+                g.setColor(c);
 
-        if (model.isRollover()){ // hover
-            System.out.print("@@");
-            Color c = new Color(0,0,0);
-            g.setColor(c);
-//            g.fillOval(100, 100, 50, 50);
+                Toolkit tool = this.getToolkit();
+                Image image = tool.getImage(imgSrc[1]);
+                g.drawImage(image, 0, 0, new Color(255,255,255), null);
 
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
+            } else {
+                System.out.print("no");
 
-            Toolkit tool = this.getToolkit();
-            Image image = tool.getImage(imgSrc[2]);
-            g.drawImage(image, 0, 0, new Color(255,255,255), null);
-//            return;
+                Color c = new Color(120,120,120);
+                g.setColor(c);
+
+                g.clearRect(0,0,60,60);
+                Toolkit tool = this.getToolkit();
+                Image image = tool.getImage(imgSrc[0]);
+                g.drawImage(image, 0, 0, new Color(255,255,255), null);
+            }
+
+            if (model.isRollover()){ // hover
+                System.out.print("@@");
+                Color c = new Color(0,0,0);
+                g.setColor(c);
+    //            g.fillOval(100, 100, 50, 50);
+
+    //            g.fillArc(0,0,60,60, 0, 360);
+    //            g.fillArc(0,0,60,60, 0, 360);
+    //            g.fillArc(0,0,60,60, 0, 360);
+
+                Toolkit tool = this.getToolkit();
+                Image image = tool.getImage(imgSrc[2]);
+                g.drawImage(image, 0, 0, new Color(255,255,255), null);
+    //            return;
+            }
         }
     }
 }
