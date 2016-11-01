@@ -1,6 +1,8 @@
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
+
 import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
@@ -44,6 +46,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.RandomAccess;
 import java.util.Vector;
 
 import javax.swing.JSlider;
@@ -60,6 +63,9 @@ import javax.swing.SwingConstants;
 import java.awt.CardLayout;
 import java.awt.Toolkit;
 
+
+import java.util.*;
+import java.io.*;
 import java.net.*;
 
 public class Jplayer extends JFrame {
@@ -74,14 +80,18 @@ public class Jplayer extends JFrame {
     private JButton playBtn;
     private JButton nextBtn;
     private JButton preBtn;
+    private JButton listBtn;
 
     // 播放状态
-    private JStatus jStatus;
+    public JStatus jStatus;
 
     // 播放器
-    private String path;
-    private MediaPlayer mediaPlayer;
+    public String path;
+    public MediaPlayer mediaPlayer;
     private Media media;
+
+    // List
+    private Vector<String> PlayList;
 
     public static void main(String[] args){
 //        System.out.print("hello, java\n");
@@ -125,6 +135,7 @@ public class Jplayer extends JFrame {
         theHead.setLayout(null);
         {
             title = new JLabel("jPlayer - FileName.mp3");
+
             title.setForeground(Color.WHITE);
             title.setHorizontalAlignment(SwingConstants.CENTER);
             title.setVerticalAlignment(SwingConstants.CENTER);
@@ -153,7 +164,26 @@ public class Jplayer extends JFrame {
         nextBtn = new JButton("next");
         nextBtn.setBounds(440, 140, 60, 40);
         contentPane.add(nextBtn);
+        nextBtn.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
 
+            }
+        });
+
+
+        listBtn = new JButton("list");
+        listBtn.setBounds(440, 240, 60, 40);
+        contentPane.add(listBtn);
+
+        Jplayer jp2other = this;
+        listBtn.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+//                String[] temp = {"E:/CloudMusic/1.mp3", "E:/CloudMusic/Diri - Diri Da Dance.mp3", "E:/CloudMusic/2.mp3", "four"};
+//                new Livelist(temp, jp2other);
+                new Livelist(jp2other);
+                System.out.println("asd");
+            }
+        });
 
         preBtn = new JButton("pre");
         preBtn.setBounds(680, 140, 60, 40);
@@ -164,26 +194,55 @@ public class Jplayer extends JFrame {
         JP_View_init();
         jStatus = new JStatus();
 
+        path = "E:/CloudMusic/1.mp3";
+
+
+//        String[] temp = {"one", "two", "three", "four"};
+//        JList myList = new JList(temp);
+
+
+//        myList.setListData(vt);
+
+
+
         contentPane.repaint();
+        this.repaint();
     }
 
 
-    void thePlay(){
+    public void thePlay(){
         JFXPanel fxPanel;
         fxPanel = new JFXPanel();
 
+        jStatus.isPlay = !jStatus.isPlay;
+        if (jStatus.isPlay){
+            if (jStatus.nowPlay == null){
+//                path = "file:/E:/CloudMusic/1.mp3";
+                String filePath = "file:/"+path;
+                File Song = new File(path);
 
-        if (!jStatus.isPlay){
-            path = "file:/E:/CloudMusic/1.mp3";
-            media = new Media(path);
-            mediaPlayer = new MediaPlayer(media);
+                URI uri = Song.toURI();
+                String thePath = uri.toASCIIString();
+//                URI uri = new URI(filePath);
+//                URL url = uri.toURL();
+
+                media = new Media(thePath);
+                mediaPlayer = new MediaPlayer(media);
+
+                contentPane.flashImage(path, title);
+//                id3v2Tag.getArtist
+
+            }
             mediaPlayer.play();
         } else {
-            mediaPlayer.stop();
+            mediaPlayer.pause();
+            jStatus.nowPlay = mediaPlayer;
         }
 
-        jStatus.isPlay = !jStatus.isPlay;
 
+        title.repaint();
+        theHead.repaint();
+//        theHead.updateUI();
         contentPane.repaint();
 
 
@@ -216,6 +275,8 @@ public class Jplayer extends JFrame {
                 }
             }
         });
+
+        this.repaint();
     }
 
 
