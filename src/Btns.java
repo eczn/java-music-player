@@ -1,14 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
+import java.net.URL;
 
 public class Btns extends JButton {
     // imgSrc:
     // [0]: normal Status Icon src
     // [1]: onClicked Status Icon src
     // [2]: Hover Status Icon src
-    protected String[] imgSrc;
-
+    protected URL[] imgSrc;
+    public String btnName;
     public Btns() { // construtor
 
     }
@@ -20,8 +21,14 @@ public class Btns extends JButton {
         super(test);
 
     }
-    public Btns(String[] ImageSrc_output, String text){
+
+//    public Btns(String[] ImageSrc_output, String text){
+//        super(text);
+//        imgSrc = ImageSrc_output;
+//    }
+    public Btns(URL[] ImageSrc_output, String text){
         super(text);
+        btnName = text;
         imgSrc = ImageSrc_output;
     }
 
@@ -36,6 +43,7 @@ public class Btns extends JButton {
 
 //        Color c = g.getColor();
 
+        g.clearRect(0,0,60,60);
 
         if (model.isPressed()) {
             System.out.print("!!");
@@ -47,9 +55,10 @@ public class Btns extends JButton {
 //            g.fillArc(0,0,60,60, 0, 360);
 //            g.fillArc(0,0,60,60, 0, 360);
 //            g.fillArc(0,0,60,60, 0, 360);
-            g.clearRect(0,0,60,60);
 
-
+            Toolkit tool = this.getToolkit();
+            Image image = tool.getImage(imgSrc[1]);
+            g.drawImage(image, 0, 0, new Color(255,255,255), null);
 
 //            ImageObserver
 //            g.drawImag
@@ -57,18 +66,13 @@ public class Btns extends JButton {
 
         } else {
             System.out.print("no");
-            g.clearRect(0,0,60,60);
+
             Color c = new Color(120,120,120);
             g.setColor(c);
-//            g.fillOval(100, 100, 50, 50);
-//            g.fillRect(0,0,60,60);
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
-//            g.fillArc(0,0,60,60, 0, 360);
+
             g.clearRect(0,0,60,60);
             Toolkit tool = this.getToolkit();
-            Image image = tool.getImage(Jplayer.class.getResource("images/play_icon.png"));
+            Image image = tool.getImage(imgSrc[0]);
             g.drawImage(image, 0, 0, new Color(255,255,255), null);
         }
 
@@ -81,9 +85,10 @@ public class Btns extends JButton {
 //            g.fillArc(0,0,60,60, 0, 360);
 //            g.fillArc(0,0,60,60, 0, 360);
 //            g.fillArc(0,0,60,60, 0, 360);
-            g.fillArc(0,0,60,60, 0, 360);
 
-            g.drawArc(0,0,60,60,0,360);
+            Toolkit tool = this.getToolkit();
+            Image image = tool.getImage(imgSrc[2]);
+            g.drawImage(image, 0, 0, new Color(255,255,255), null);
 //            return;
         }
     }

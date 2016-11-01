@@ -107,6 +107,8 @@ public class Jplayer extends JFrame {
         this.setVisible(true);
 
         contentPane = new ImgPanel();
+        contentPane.setVisible(true);
+        contentPane.repaint();
         setBounds(200, 100, 800, 435);
         setContentPane(contentPane);
         contentPane.setLayout(null);
@@ -125,12 +127,15 @@ public class Jplayer extends JFrame {
             title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
 //            panel_1.setFont(new Font("Consolas", Font.BOLD, 20));
             title.setBounds(0, 0, 800, 50);
-
+            title.setVisible(true);
+            title.repaint();
             theHead.add(title);
         }
 
+        theHead.setVisible(true);
+        theHead.repaint();
         contentPane.add(theHead);
-        
+
 
 //        j.setSize(300, 200);
 //        j.setVisible(true);
@@ -146,8 +151,13 @@ public class Jplayer extends JFrame {
 //        );
 
 
+        URL[] playIcons = {
+            Jplayer.class.getResource("images/play_icon.png"),
+            Jplayer.class.getResource("images/play-pressed.png"),
+            Jplayer.class.getResource("images/play-pressed.png")
+        };
 
-        playBtn = new Btns("play");
+        playBtn = new Btns(playIcons,"play");
         playBtn.setBorder(null);
         playBtn.setSize(60, 60);
         playBtn.setVisible(true);
@@ -164,13 +174,19 @@ public class Jplayer extends JFrame {
             }
 
         });
+        playBtn.setVisible(true);
         playBtn.repaint();
         contentPane.add(playBtn);
 
 
-        nextBtn = new Btns("next");
+        URL[] nextTemp = {
+                Jplayer.class.getResource("images/next_icon.png"),
+                Jplayer.class.getResource("images/next-pressed.png"),
+                Jplayer.class.getResource("images/next-pressed.png")
+        };
+        nextBtn = new Btns(nextTemp,"next");
         nextBtn.setBorder(null);
-        nextBtn.setBounds(440, 130, 60, 60);
+        nextBtn.setBounds(680, 130, 60, 60);
         contentPane.add(nextBtn);
         nextBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -178,12 +194,30 @@ public class Jplayer extends JFrame {
             }
         });
 
+        URL[] preTemp = {
+                Jplayer.class.getResource("images/pre_icon.png"),
+                Jplayer.class.getResource("images/pre-pressed.png"),
+                Jplayer.class.getResource("images/pre-pressed.png")
+        };
+        preBtn = new Btns(preTemp,"pre");
+        preBtn.setBorder(null);
+        preBtn.setBounds(440, 130, 60, 60);
+        preBtn.setVisible(true);
+        preBtn.repaint();
+        contentPane.add(preBtn);
 
-        listBtn = new Btns("list");
+
+        URL[] listTemp = {
+                Jplayer.class.getResource("images/list_icon.png"),
+                Jplayer.class.getResource("images/list-pressed.png"),
+                Jplayer.class.getResource("images/list-pressed.png")
+        };
+        listBtn = new Btns(listTemp,"list");
         listBtn.setBorder(null);
-        listBtn.setBounds(440, 240, 60, 60);
+        listBtn.setBounds(700, 350, 60, 60);
+        listBtn.setVisible(true);
+        listBtn.repaint();
         contentPane.add(listBtn);
-
         Jplayer jp2other = this;
         listBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -194,10 +228,8 @@ public class Jplayer extends JFrame {
             }
         });
 
-        preBtn = new Btns("pre");
-        preBtn.setBorder(null);
-        preBtn.setBounds(680, 130, 60, 60);
-        contentPane.add(preBtn);
+
+
     }
 
     public Jplayer(){
