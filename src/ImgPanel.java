@@ -1,12 +1,19 @@
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class ImgPanel extends JPanel {
 
@@ -37,6 +44,7 @@ public class ImgPanel extends JPanel {
         g.drawImage(dimg, 0, 0, null);
     }
 
+    // paint img by Graphics
     public void setImage(BufferedImage Image) {
         if (Image != null)
             image = Image;
@@ -44,5 +52,36 @@ public class ImgPanel extends JPanel {
             image = default_image;
         this.paintComponent(getGraphics());
         this.paintAll(getGraphics());
+    }
+
+    // paint through by id3
+    // lib mp3agic needed
+    // path:  music paht like: "E:/CloudMusic/1.mp3"
+    public void flashImage(String path, JLabel title){
+        try {
+            Mp3File mp3file = new Mp3File(path);
+            if (mp3file.hasId3v2Tag()) {
+                ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+
+
+//                title.setText(id3v2Tag.getArtist()+" - "+);
+                String[] tempArr = path.split("/");
+                String MP3FileName = tempArr[tempArr.length-1];
+
+                title.setText(id3v2Tag.getArtist() + " - " + MP3FileName);
+
+                byte[] imageData = id3v2Tag.getAlbumImage();
+                if (imageData != null) {
+                    String mimeType = id3v2Tag.getAlbumImageMimeType();
+                    ByteArrayInputStream in = new ByteArrayInputStream(imageData);
+                    //将in作为输入流，读取图片存入image中，而这里in可以为ByteArrayInputStream();
+                    BufferedImage target_image = ImageIO.read(in);
+
+                    this.setImage(target_image);
+                }
+            }
+        } catch (UnsupportedTagException | InvalidDataException | IOException e1) {
+//            System.out.println(e1);
+        }
     }
 }
