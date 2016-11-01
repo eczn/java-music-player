@@ -6,15 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.UIDefaults;
-import javax.swing.Painter;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -49,17 +41,8 @@ import java.util.Random;
 import java.util.RandomAccess;
 import java.util.Vector;
 
-import javax.swing.JSlider;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JLabel;
-
 import java.awt.Font;
 
-import javax.swing.SwingConstants;
 import java.awt.CardLayout;
 import java.awt.Toolkit;
 
@@ -77,10 +60,10 @@ public class Jplayer extends JFrame {
     private JLabel title;
 
     // 按钮
-    private JButton playBtn;
-    private JButton nextBtn;
-    private JButton preBtn;
-    private JButton listBtn;
+    private Btns playBtn;
+    private Btns nextBtn;
+    private Btns preBtn;
+    private Btns listBtn;
 
     // 播放状态
     public JStatus jStatus;
@@ -147,22 +130,47 @@ public class Jplayer extends JFrame {
         }
 
         contentPane.add(theHead);
+        
+
+//        j.setSize(300, 200);
+//        j.setVisible(true);
+
+
+//        playBtn = new JButton("play");
+
+//        ImageIcon pre = new ImageIcon(
+//                Jplayer.class.getResource("images/play_icon.png")
+//        );
+//        ImageIcon temp = new ImageIcon(
+//                Jplayer.class.getResource("images/play-pressed.png")
+//        );
 
 
 
-        playBtn = new JButton("play");
+        playBtn = new Btns("play");
+        playBtn.setBorder(null);
+        playBtn.setSize(60, 60);
+        playBtn.setVisible(true);
         playBtn.setBounds(560, 130, 60, 60);
         playBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-//                System.out.println("btn_playBtn click!");
+//                playBtn.setIcon(temp);
+                ButtonModel model = playBtn.getModel();
+                if (model.isPressed()){
+                    System.out.print("!!");
+                }
                 thePlay();
+//                playBtn.setIcon(pre);
             }
 
         });
+        playBtn.repaint();
         contentPane.add(playBtn);
 
-        nextBtn = new JButton("next");
-        nextBtn.setBounds(440, 140, 60, 40);
+
+        nextBtn = new Btns("next");
+        nextBtn.setBorder(null);
+        nextBtn.setBounds(440, 130, 60, 60);
         contentPane.add(nextBtn);
         nextBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -171,8 +179,9 @@ public class Jplayer extends JFrame {
         });
 
 
-        listBtn = new JButton("list");
-        listBtn.setBounds(440, 240, 60, 40);
+        listBtn = new Btns("list");
+        listBtn.setBorder(null);
+        listBtn.setBounds(440, 240, 60, 60);
         contentPane.add(listBtn);
 
         Jplayer jp2other = this;
@@ -185,24 +194,20 @@ public class Jplayer extends JFrame {
             }
         });
 
-        preBtn = new JButton("pre");
-        preBtn.setBounds(680, 140, 60, 40);
+        preBtn = new Btns("pre");
+        preBtn.setBorder(null);
+        preBtn.setBounds(680, 130, 60, 60);
         contentPane.add(preBtn);
     }
 
     public Jplayer(){
+        this.repaint();
         JP_View_init();
+        this.repaint();
         jStatus = new JStatus();
 
+        // default path
         path = "E:/CloudMusic/1.mp3";
-
-
-//        String[] temp = {"one", "two", "three", "four"};
-//        JList myList = new JList(temp);
-
-
-//        myList.setListData(vt);
-
 
 
         contentPane.repaint();
