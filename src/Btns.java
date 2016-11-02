@@ -12,6 +12,7 @@ public class Btns extends JButton {
 //    protected Image[] imgs;
     public String btnName;
     public boolean justText;
+
     public Btns() { // construtor
 
     }
@@ -44,7 +45,7 @@ public class Btns extends JButton {
             ButtonModel model = getModel();
             g.clearRect(0,0,60,60);
             if (model.isPressed()) {
-                System.out.print("!!");
+//                System.out.print("!!");
                 Color c = new Color(0,0,0);
                 g.setColor(c);
 
@@ -53,7 +54,7 @@ public class Btns extends JButton {
                 g.drawImage(image, 0, 0, new Color(255,255,255), null);
 
             } else {
-                System.out.print("no");
+//                System.out.print("no");
 
                 Color c = new Color(120,120,120);
                 g.setColor(c);
@@ -65,7 +66,7 @@ public class Btns extends JButton {
             }
 
             if (model.isRollover()){ // hover
-                System.out.print("@@");
+//                System.out.print("@@");
                 Color c = new Color(0,0,0);
                 g.setColor(c);
     //            g.fillOval(100, 100, 50, 50);
