@@ -1,3 +1,5 @@
+import javafx.embed.swing.JFXPanel;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -13,7 +15,7 @@ import java.util.Vector;
 public class Livelist extends JFrame {
     public JList list;
     public Vector<String> vec;
-
+    DefaultListModel<String> model;
 
     private ImgPanel contentPane;
 //    private Btns listAdd;
@@ -96,15 +98,13 @@ public class Livelist extends JFrame {
 //        System.out.println(vec.get(1));
     }
 
-    DefaultListModel<String> model;
+
     public Livelist(Jplayer jP){
         liveDown = new Livedown();
         listLoader();
 
         list = new JList<>(model);
         isOdd = true;
-
-//        list = new JList(vec);
 
         setTitle("Live-List");
         setVisible(true);
@@ -115,24 +115,43 @@ public class Livelist extends JFrame {
 
         setContentPane(list);
 
-        list.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                isOdd = !isOdd;
-                if (isOdd){
-//                    System.out.println( vec.get(list.getSelectedIndex()) );
-//                    URL url = new URL(vec.get(list.getSelectedIndex()))
-//                    String targetFile = vec.get(list.getSelectedIndex());
+//        list.addListSelectionListener(new ListSelectionListener() {
+//            public void valueChanged(ListSelectionEvent e) {
+//                isOdd = !isOdd;
+//                if (isOdd){
+////                    System.out.println( vec.get(list.getSelectedIndex()) );
+////                    URL url = new URL(vec.get(list.getSelectedIndex()))
+////                    String targetFile = vec.get(list.getSelectedIndex());
+////                    jP.path = list.get(list.getSelectedIndex());
+//
+//                    jP.path = model.getElementAt(list.getSelectedIndex());
+//
+//
+//                    jP.jStatus.isPlay = false;
+//                    if (jP.jStatus.isPlay){
+//                        jP.mediaPlayer.stop();
+//                    }
+//                    jP.thePlay();
+//                }
+//            }
+//        });
 
-//                    jP.path = list.get(list.getSelectedIndex());
+        list.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent mouseEvent) {
+                JList theList = (JList) mouseEvent.getSource();
+//                System.out.println("### "+ mouseEvent.get);
+                if (mouseEvent.getClickCount() == 2) {
+                    int index = theList.locationToIndex(mouseEvent.getPoint());
+//                    System.out.println("### index: "+ index);
+                    if (index>0){
+                        jP.path = model.getElementAt(index);
 
-                    jP.path = model.getElementAt(list.getSelectedIndex());
-
-
-                    jP.jStatus.isPlay = false;
-                    if (jP.jStatus.isPlay){
-                        jP.mediaPlayer.stop();
+                        jP.jStatus.isPlay = false;
+                        if (jP.jStatus.isPlay){
+                            jP.mediaPlayer.stop();
+                        }
+                        jP.thePlay();
                     }
-                    jP.thePlay();
                 }
             }
         });
@@ -160,7 +179,6 @@ public class Livelist extends JFrame {
                     model.addElement(willBePath);
                 }
                 list.repaint();
-
 
             }
         });
@@ -201,9 +219,13 @@ public class Livelist extends JFrame {
                 System.out.println("btn_playBtn click!");
                 String URLInput = JOptionPane.showInputDialog("输入歌曲URL");
 
+                if (URLInput == null){
+                    return;
+                } else {
+                    liveDown.liveAdown(URLInput, Livelist_temp);
+                }
 
 
-                liveDown.liveAdown(URLInput, Livelist_temp);
 
                 System.out.println("@@@@ From Graph @@@@ " + URLInput);
 //                JFileChooser myFC = new JFileChooser();

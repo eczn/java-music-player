@@ -55,6 +55,8 @@ public class Jplayer extends JFrame {
     // main container
     private ImgPanel contentPane;
 
+    public JLabel test;
+
     // 顶部条
     private JPanel theHead;
     private JLabel title;
@@ -138,6 +140,8 @@ public class Jplayer extends JFrame {
         contentPane.add(theHead);
 
 
+
+
 //        j.setSize(300, 200);
 //        j.setVisible(true);
 //        playBtn = new JButton("play");
@@ -176,6 +180,12 @@ public class Jplayer extends JFrame {
         playBtn.repaint();
         contentPane.add(playBtn);
 
+        test = new JLabel("!!");
+        test.setBounds(560, 200, 60, 60);
+        test.setVisible(true);
+        test.repaint();
+        test.setText("#!@!#!$!$!$");
+        contentPane.add(test);
 
         URL[] nextTemp = {
                 Jplayer.class.getResource("images/next_icon.png"),
@@ -222,7 +232,7 @@ public class Jplayer extends JFrame {
 //                String[] temp = {"E:/CloudMusic/1.mp3", "E:/CloudMusic/Diri - Diri Da Dance.mp3", "E:/CloudMusic/2.mp3", "four"};
 //                new Livelist(temp, jp2other);
                 livelist.setVisible(true);
-                System.out.println("asd");
+//                System.out.println("asd");
             }
         });
 
@@ -231,6 +241,10 @@ public class Jplayer extends JFrame {
     public Livelist livelist;
     public Jplayer(){
         this.repaint();
+
+
+
+
 
         livelist = new Livelist(this);
 
@@ -243,6 +257,7 @@ public class Jplayer extends JFrame {
 
 
         contentPane.repaint();
+
         this.repaint();
 
 
@@ -255,6 +270,7 @@ public class Jplayer extends JFrame {
         this.setVisible(true);
     }
 
+//    public boolean playNew;
 
     public void thePlay(){
         JFXPanel fxPanel;
@@ -292,30 +308,41 @@ public class Jplayer extends JFrame {
         contentPane.repaint();
 
 
+        System.out.println("before");
 
-        mediaPlayer.setOnReady(new Runnable() {
+
+
+
+
+        mediaPlayer.setOnPlaying(new Runnable() {
             public void run() {
-                mediaPlayer.play();
+//                System.out.println("~~");
+//                mediaPlayer.play();
+
                 Duration t;
+
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
                     // ===================================
 //                    Play_Slider.setValue((int) mediaPlayer.getCurrentTime().toSeconds());
-
                     // ===================================
                     t = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
+
+//                    test.getText();
+//                    test.setText("1");
+
+                    System.out.println("12312323");
 
                     System.out.println(mediaPlayer.getCurrentTime().toSeconds()+"   " + t.toString());
 //                    System.out.println();
 //                    Time_Left.setText(
 //                            Integer.toString((int) t.toMinutes()) + ":" + Integer.toString((int) t.toSeconds() % 60));
-
 //                    Current_duration.setText(Integer.toString((int) mediaPlayer.getCurrentTime().toMinutes()) + ":"
 //                            + Integer.toString((int) mediaPlayer.getCurrentTime().toSeconds() % 60));
                     // ===================================
                     try {
                         Thread.sleep(300); // 1000 milliseconds is one second.
                     } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
+                        System.out.println(ex);
                     }
 
                 }

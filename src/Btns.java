@@ -41,7 +41,7 @@ public class Btns extends JButton {
         if (justText){
             g.drawString(btnName, 0,0);
         } else {
-            System.out.println(btnName);
+//            System.out.println(btnName);
             ButtonModel model = getModel();
             g.clearRect(0,0,60,60);
             if (model.isPressed()) {
