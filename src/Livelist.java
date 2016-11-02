@@ -14,11 +14,14 @@ public class Livelist extends JFrame {
     public JList list;
     public Vector<String> vec;
 
+
     private ImgPanel contentPane;
 //    private Btns listAdd;
 //    private Btns listSave;
     private JButton listAdd;
     private JButton listSave;
+    private JButton listURL;
+    private Livedown liveDown;
     private boolean isOdd;
 
     public void listLoader(){
@@ -87,6 +90,7 @@ public class Livelist extends JFrame {
 
     public Livelist(){
         vec = new Vector();
+        liveDown = new Livedown();
         listLoader();
 
 //        System.out.println(vec.get(1));
@@ -94,6 +98,7 @@ public class Livelist extends JFrame {
 
     DefaultListModel<String> model;
     public Livelist(Jplayer jP){
+        liveDown = new Livedown();
         listLoader();
 
         list = new JList<>(model);
@@ -170,7 +175,7 @@ public class Livelist extends JFrame {
         listSave.setBounds(80, 390, 80, 30);
         listSave.setHorizontalAlignment(SwingConstants.CENTER);
         listSave.setVerticalAlignment(SwingConstants.CENTER);
-        listSave.addMouseListener(new MouseAdapter() {
+        listSave.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e) {
                 listSave();
             }
@@ -184,8 +189,48 @@ public class Livelist extends JFrame {
         this.setVisible(true);
 
 
+        Livelist Livelist_temp = this;
+
+
+        listURL = new JButton("- URL");
+        listURL.setBounds(160, 390, 80, 30);
+        listURL.setHorizontalAlignment(SwingConstants.CENTER);
+        listURL.setVerticalAlignment(SwingConstants.CENTER);
+        listURL.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                System.out.println("btn_playBtn click!");
+                String URLInput = JOptionPane.showInputDialog("输入歌曲URL");
+
+
+
+                liveDown.liveAdown(URLInput, Livelist_temp);
+
+                System.out.println("@@@@ From Graph @@@@ " + URLInput);
+//                JFileChooser myFC = new JFileChooser();
+//                new FileChooser(listAdd);
+
+            }
+        });
+        listURL.setVisible(true);
+        listURL.repaint();
+        list.add(listURL);
+        list.repaint();
+
+
+
+
+
+//
+//        String ddd = JOptionPane.showInputDialog("输入歌曲URL");
+//        liveDown.liveAdown(ddd, this);
+
     }
     JButton open;
+
+    public void addElem(String target){
+        model.addElement(target);
+
+    }
 
     public static void main(String[] args){
 //        listLoader();
