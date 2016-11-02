@@ -6,10 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.Vector;
 
@@ -18,10 +15,10 @@ public class Livelist extends JFrame {
     public Vector<String> vec;
 
     private ImgPanel contentPane;
-    private Btns listAdd;
-    private Btns listSave;
-//    private JButton listAdd;
-//    private JButton listSave;
+//    private Btns listAdd;
+//    private Btns listSave;
+    private JButton listAdd;
+    private JButton listSave;
     private boolean isOdd;
 
     public void listLoader(){
@@ -48,6 +45,7 @@ public class Livelist extends JFrame {
                 model.addElement(tempString);
                 line++;
             }
+
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,6 +58,31 @@ public class Livelist extends JFrame {
                 }
             }
         }
+    }
+
+    public void listSave(){
+        String usrHome = System.getProperty("user.home");
+        String fileName;
+        fileName = usrHome+"/FutureSoft/JP/LiveList.data";
+
+        File file = new File(fileName);
+
+        if (file.exists()){
+
+        }
+        try {
+            PrintWriter output = new PrintWriter(file);
+//                    output.println("a");
+            int i = 0;
+            for (i=0;i<model.getSize();i++){
+                output.println(model.getElementAt(i));
+            }
+
+            output.close();
+        } catch ( FileNotFoundException fnfe){
+            System.out.print(fnfe);
+        }
+
     }
 
     public Livelist(){
@@ -111,7 +134,7 @@ public class Livelist extends JFrame {
         setBackground(Color.WHITE);
 
 
-        listAdd = new Btns("+ add");
+        listAdd = new JButton("+ add");
 //        listAdd = new JButton("+ add");
         listAdd.setBounds(0, 390, 80, 30);
         listAdd.setHorizontalAlignment(SwingConstants.CENTER);
@@ -132,6 +155,8 @@ public class Livelist extends JFrame {
                     model.addElement(willBePath);
                 }
                 list.repaint();
+
+
             }
         });
         listAdd.setVisible(true);
@@ -141,6 +166,20 @@ public class Livelist extends JFrame {
         list.repaint();
 
 //        listSave = new Btns("| save");
+        listSave = new JButton("↓ save");
+        listSave.setBounds(80, 390, 80, 30);
+        listSave.setHorizontalAlignment(SwingConstants.CENTER);
+        listSave.setVerticalAlignment(SwingConstants.CENTER);
+        listSave.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                listSave();
+            }
+        });
+        listSave.setVisible(true);
+        listSave.repaint();
+        list.add(listSave);
+        list.setVisible(true);
+        list.repaint();
 
         this.setVisible(true);
 
