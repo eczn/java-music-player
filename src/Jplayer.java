@@ -73,6 +73,7 @@ public class Jplayer extends JFrame {
     public MediaPlayer mediaPlayer;
     private Media media;
 
+
     // List
     private Vector<String> PlayList;
 
@@ -215,20 +216,24 @@ public class Jplayer extends JFrame {
         listBtn.setVisible(true);
         listBtn.repaint();
         contentPane.add(listBtn);
-        Jplayer jp2other = this;
+//        Jplayer jp2other = this;
         listBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 //                String[] temp = {"E:/CloudMusic/1.mp3", "E:/CloudMusic/Diri - Diri Da Dance.mp3", "E:/CloudMusic/2.mp3", "four"};
 //                new Livelist(temp, jp2other);
-                new Livelist(jp2other);
+                livelist.setVisible(true);
                 System.out.println("asd");
             }
         });
 
     }
 
+    public Livelist livelist;
     public Jplayer(){
         this.repaint();
+
+        livelist = new Livelist(this);
+
         JP_View_init();
         this.repaint();
         jStatus = new JStatus();

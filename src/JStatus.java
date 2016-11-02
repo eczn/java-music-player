@@ -10,10 +10,9 @@ public class JStatus {
 
     public JStatus(){
         isPlay = false;
-        nowPlay = null;
         isListed = false;
+
+        nowPlay = null;
     }
 
 }
-
-

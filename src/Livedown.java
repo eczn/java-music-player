@@ -8,6 +8,7 @@ public class Livedown {
     public void live_callback(){
 
     }
+
     private boolean httpDownload(String httpUrl,String saveFile){
         int bytesum = 0;
         int byteread = 0;
@@ -34,7 +35,6 @@ public class Livedown {
                 fs.write(buffer, 0, byteread);
             }
 
-
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -45,6 +45,33 @@ public class Livedown {
         } finally {
 //            live_callback();
         }
+    }
+
+    public int getURLFileLength(String urlStr){
+        int fileLength;
+
+        try {
+            URL theUrl = new URL(urlStr);
+            HttpURLConnection urlcon = (HttpURLConnection)theUrl.openConnection();
+
+            fileLength = urlcon.getContentLength();
+            System.out.println("@@@@@@ fileLength!!: "+fileLength);
+
+
+//            return fileLength;
+        } catch (MalformedURLException GetLengthE ){
+            // url faild
+            fileLength = -1;
+            System.out.println("GLE!");
+            System.out.println(GetLengthE);
+
+        } catch (IOException IOE){
+            fileLength = -2;
+            System.out.println("IOE!");
+            System.out.println(IOE);
+        }
+
+        return fileLength;
     }
 
     public void liveAdown(String urlStr, Livelist ll){
@@ -60,30 +87,28 @@ public class Livedown {
         dlSuccess = httpDownload(urlStr, usrHome+"/FutureSoft/JP/Livedown/"+fileName);
 
         if (dlSuccess){
-//            ll.
+            ll.addElem(usrHome+"/FutureSoft/JP/Livedown/"+fileName);
         } else {
 
         }
     }
 
-    void Livedown() {
+    public Livedown() {
+        System.out.println("Livedown!");
+
+        int size;
+        String temp = "http://localhost/music/1.mp3";
+        size = getURLFileLength(temp);
+        System.out.println("theSize@@@@ "+ size);
 
     }
 
-//    public static void main(String[] args){
-//        String usrHome = System.getProperty("user.home");
-//        String softHome = "/FutureSoft/JP/";
-////        String urlStr = "http://vally.eczn.website/index.html";
-//        String urlStr = "http://localhost/music/1.mp3";
-//
-//        String[] urlStrs = urlStr.split("/");
-//
-//        String fileName = urlStrs[urlStrs.length-1];
-////        fileName = usrHome+"/FutureSoft/JP/LiveList.data";
-////        httpDownload(String httpUrl,String saveFile)
-//
-//        httpDownload(urlStr, usrHome+"/FutureSoft/JP/Livedown/"+fileName);
-//    }
+    public static void main(String[] args){
+
+
+
+        Livedown temp = new Livedown();
+    }
 
 
 }
