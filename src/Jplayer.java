@@ -239,6 +239,15 @@ public class Jplayer extends JFrame {
 
         contentPane.repaint();
         this.repaint();
+
+
+//        SwingUtilities.updateComponentTreeUI(this);
+        this.setVisible(false);
+        this.setVisible(true);
+        this.setVisible(false);
+        this.setVisible(true);
+        this.setVisible(false);
+        this.setVisible(true);
     }
 
 
