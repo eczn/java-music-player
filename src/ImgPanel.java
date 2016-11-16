@@ -46,10 +46,11 @@ public class ImgPanel extends JPanel {
 
     // paint img by Graphics
     public void setImage(BufferedImage Image) {
-        if (Image != null)
+        if (Image != null){
             image = Image;
-        else
+        } else {
             image = default_image;
+        }
         this.paintComponent(getGraphics());
         this.paintAll(getGraphics());
     }

@@ -1,52 +1,11 @@
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
-
 import javafx.util.Duration;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import com.mpatric.mp3agic.ID3v1;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.RandomAccess;
-import java.util.Vector;
-
-import java.awt.Font;
-
-import java.awt.CardLayout;
-import java.awt.Toolkit;
-
-
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -54,7 +13,7 @@ import java.net.*;
 public class Jplayer extends JFrame {
     // main container
     private ImgPanel contentPane;
-
+    public Container jp;
     public JLabel test;
 
     // 顶部条
@@ -75,24 +34,10 @@ public class Jplayer extends JFrame {
     public MediaPlayer mediaPlayer;
     private Media media;
 
-
     // List
     private Vector<String> PlayList;
 
     public static void main(String[] args){
-//        System.out.print("hello, java\n");
-//        try {
-//            Mp3File mp3file = new Mp3File("E:/CloudMusic/1.mp3");
-//            System.out.println("Length of this mp3 is: " + mp3file.getLengthInSeconds() + " seconds");
-//            System.out.println("Bitrate: " + mp3file.getBitrate() + " kbps " + (mp3file.isVbr() ? "(VBR)" : "(CBR)"));
-//            System.out.println("Sample rate: " + mp3file.getSampleRate() + " Hz");
-//            System.out.println("Has ID3v1 tag?: " + (mp3file.hasId3v1Tag() ? "YES" : "NO"));
-//            System.out.println("Has ID3v2 tag?: " + (mp3file.hasId3v2Tag() ? "YES" : "NO"));
-//            System.out.println("Has custom tag?: " + (mp3file.hasCustomTag() ? "YES" : "NO"));
-//        } catch (UnsupportedTagException | InvalidDataException | IOException e1) {
-//            System.out.println(e1);
-//        }
-
         Jplayer myP =  new Jplayer();
     }
     private void JP_View_init(){
@@ -105,15 +50,16 @@ public class Jplayer extends JFrame {
         setResizable(false);
         // 设置背景颜色
         setBackground(Color.WHITE);
+        setBounds(200, 100, 800, 435);
         // 点右上角按钮的时候的默认操作，这里设置为  EXIT_ON_CLOSE 也就是直接退出
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-        this.setVisible(true);
 
         contentPane = new ImgPanel();
-        contentPane.setVisible(true);
-        contentPane.repaint();
-        setBounds(200, 100, 800, 435);
-        setContentPane(contentPane);
+//        contentPane.setVisible(true);
+//        contentPane.repaint();
+        Container jp = getContentPane();
+        jp.add(contentPane);
+//        setContentPane(jp);
         contentPane.setLayout(null);
         contentPane.setBackground(new Color(244, 244, 244));
 
@@ -138,19 +84,6 @@ public class Jplayer extends JFrame {
         theHead.setVisible(true);
         theHead.repaint();
         contentPane.add(theHead);
-
-
-
-
-//        j.setSize(300, 200);
-//        j.setVisible(true);
-//        playBtn = new JButton("play");
-//        ImageIcon pre = new ImageIcon(
-//                Jplayer.class.getResource("images/play_icon.png")
-//        );
-//        ImageIcon temp = new ImageIcon(
-//                Jplayer.class.getResource("images/play-pressed.png")
-//        );
 
 
         URL[] playIcons = {
@@ -202,6 +135,7 @@ public class Jplayer extends JFrame {
             }
         });
 
+
         URL[] preTemp = {
                 Jplayer.class.getResource("images/pre_icon.png"),
                 Jplayer.class.getResource("images/pre-pressed.png"),
@@ -240,33 +174,23 @@ public class Jplayer extends JFrame {
 
     public Livelist livelist;
     public Jplayer(){
-        this.repaint();
-
-
-
-
-
-        livelist = new Livelist(this);
-
-        JP_View_init();
-        this.repaint();
-        jStatus = new JStatus();
-
         // default path
         path = "E:/CloudMusic/1.mp3";
+        livelist = new Livelist(this);
+        jStatus = new JStatus();
+
+
+        JP_View_init();
+
 
 
         contentPane.repaint();
 
-        this.repaint();
+
 
 
 //        SwingUtilities.updateComponentTreeUI(this);
-        this.setVisible(false);
-        this.setVisible(true);
-        this.setVisible(false);
-        this.setVisible(true);
-        this.setVisible(false);
+
         this.setVisible(true);
     }
 
