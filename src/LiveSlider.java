@@ -2,6 +2,9 @@
  * Created by eczn on 2016/11/16.
  */
 
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -10,10 +13,25 @@ import java.awt.event.MouseEvent;
 public class LiveSlider extends JPanel {
     private int height;
     private int width;
-    public int currentAt;
+    public double currentAt;
     public double percentage;
-    public int total;
+    public double total;
     private boolean init;
+    private MediaPlayer now_playing;
+    public JStatus now_status;
+
+    public void setPlayer(MediaPlayer P){
+        now_playing = P;
+    }
+
+    public void setCurrent(double c){
+        currentAt = c;
+        percentage = currentAt / total;
+        repaint();
+    }
+    public void setTotal(double t){
+        total = t;
+    }
 
     public static void main(String[] args){
         Frame fr = new Frame();
@@ -29,16 +47,12 @@ public class LiveSlider extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-
         g.clearRect(0,0,width,height);
 
         g.setColor(new Color(233,233,233));
         g.fillRect(0,20,width,height-50);
 
-//        g.setColor(new Color(244, 244, 244));
-        g.setColor(new Color(200,200,204));
-
-
+        g.setColor(new Color(173,180,194));
 
         double temp = percentage * width;
         System.out.println(temp);
@@ -54,17 +68,19 @@ public class LiveSlider extends JPanel {
         System.out.println("");
     }
 
+    public boolean onEvent;
     private void mouseInit(){
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                System.out.println("where: "+e.getX());
-                System.out.println("Test :"+ (1/3));
-                System.out.println("% :"+ (e.getX() / (double)width));
-                percentage = (e.getX() / (double)width);
+//                onEvent = true;
 
+                if (now_status.isPlay){
+                    percentage = (e.getX() / (double)width);
+                    now_playing.seek(new Duration(total * percentage * 1000));
+                }
                 // Jp
+//                onEvent = false;
                 repaint();
-
             }
         });
     }

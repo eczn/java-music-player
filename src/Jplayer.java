@@ -122,13 +122,6 @@ public class Jplayer extends JFrame {
 
         contentPane.add(playBtn);
 
-//        test = new JLabel("!!");
-//        test.setBounds(560, 200, 60, 60);
-//        test.setVisible(true);
-//        test.repaint();
-//        test.setText("#!@!#!$!$!$");
-//        contentPane.add(test);
-
         URL[] nextTemp = {
                 Jplayer.class.getResource("images/next_icon.png"),
                 Jplayer.class.getResource("images/next-pressed.png"),
@@ -143,7 +136,6 @@ public class Jplayer extends JFrame {
             }
         });
         contentPane.add(nextBtn);
-
 
         URL[] preTemp = {
                 Jplayer.class.getResource("images/pre_icon.png"),
@@ -255,88 +247,40 @@ public class Jplayer extends JFrame {
 
         }
 
-//        jStatus.isPlay = !jStatus.isPlay;
-
-//        if (jStatus.isPlay){ // false pre
-//            if (jStatus.nowPlay == null){
-////                path = "file:/E:/CloudMusic/1.mp3";
-////                String filePath = "file:/"+path;
-//                File Song = new File(path);
-//
-//                URI uri = Song.toURI();
-//                String thePath = uri.toASCIIString();
-////                URI uri = new URI(filePath);
-////                URL url = uri.toURL();
-//
-//                media = new Media(thePath);
-//                mediaPlayer = new MediaPlayer(media);
-//
-//                contentPane.flashImage(path, title);
-////                id3v2Tag.getArtist
-//                mediaPlayer.play();
-//            } else {
-//                mediaPlayer.stop();
-//                jStatus.nowPlay = null;
-//                thePlay();
-//
-////                mediaPlayer.play();
-//            }
-//
-//        } else {
-//            mediaPlayer.pause();
-//            jStatus.nowPlay = mediaPlayer;
-//        }
-
-//        jStatus.isPlay = !jStatus.isPlay;
-
-
-//        title.repaint();
-//        theHead.repaint();
-//        theHead.updateUI();
-//        contentPane.repaint();
-//        System.out.println("before");
-
-
-        mediaPlayer.setOnPlaying(new Runnable() {
+        mediaPlayer.setOnPlaying(new Runnable(){
             public void run() {
-//                System.out.println("~~");
-//                mediaPlayer.play();
-
                 Duration time_left;
 
+                ls.setCurrent(0.0);
+                ls.setTotal(media.getDuration().toSeconds());
+                ls.setPlayer(mediaPlayer);
+                ls.now_status = jStatus;
+
+//                mediaPlayer.setRate(0.5);
+
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
-                    // ===================================
-//                    Play_Slider.setValue((int) mediaPlayer.getCurrentTime().toSeconds());
-                    // ===================================
-
-
+                    ls.setCurrent(mediaPlayer.getCurrentTime().toSeconds());
                     time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
 
-
-                    System.out.println(mediaPlayer.getCurrentTime().toSeconds()+"   " + time_left.toString());
-
                     if (time_left.toSeconds() < 0.00001){
+                        System.out.println("EXIT!");
                         break;
                     }
 
-//                    System.out.println();
-//                    Time_Left.setText(
-//                            Integer.toString((int) t.toMinutes()) + ":" + Integer.toString((int) t.toSeconds() % 60));
-//                    Current_duration.setText(Integer.toString((int) mediaPlayer.getCurrentTime().toMinutes()) + ":"
-//                            + Integer.toString((int) mediaPlayer.getCurrentTime().toSeconds() % 60));
-                    // ===================================
-
-
                     try {
-                        Thread.sleep(300); // 1000 milliseconds is one second.
+                        Thread.sleep(500); // 1000 milliseconds is one second.
                     } catch (InterruptedException ex) {
-                        System.out.println(ex);
+                        ex.printStackTrace();
                     }
-
                 }
+            }
+        });
+        mediaPlayer.setOnEndOfMedia(new Runnable(){
+            public void run(){
+                System.out.println("END!");
+                jStatus.isPlay = false;
 
-                System.out.println("exit run");
-                // process;
+                // 单曲循环的问题
             }
         });
 
