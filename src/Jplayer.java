@@ -26,10 +26,11 @@ public class Jplayer extends JFrame {
     private Btns nextBtn;
     private Btns preBtn;
     private Btns listBtn;
+    private Btns slider;
 
     // 播放状态
     public JStatus jStatus;
-
+    public LiveSlider ls;
     // 播放器
     public String path;
     public MediaPlayer mediaPlayer;
@@ -121,12 +122,12 @@ public class Jplayer extends JFrame {
 
         contentPane.add(playBtn);
 
-        test = new JLabel("!!");
-        test.setBounds(560, 200, 60, 60);
-        test.setVisible(true);
-        test.repaint();
-        test.setText("#!@!#!$!$!$");
-        contentPane.add(test);
+//        test = new JLabel("!!");
+//        test.setBounds(560, 200, 60, 60);
+//        test.setVisible(true);
+//        test.repaint();
+//        test.setText("#!@!#!$!$!$");
+//        contentPane.add(test);
 
         URL[] nextTemp = {
                 Jplayer.class.getResource("images/next_icon.png"),
@@ -182,6 +183,8 @@ public class Jplayer extends JFrame {
 //                System.out.println("asd");
             }
         });
+
+
     }
 
 
@@ -191,10 +194,15 @@ public class Jplayer extends JFrame {
         livelist = new Livelist(this);
         jStatus = new JStatus();
 
-
         JP_View_init();
 
+        ls = new LiveSlider(300, 60);
+        ls.setBorder(null);
+        ls.setBounds(440, 200, 300, 60);
+
         contentPane.repaint();
+        contentPane.add(ls);
+
 //        SwingUtilities.updateComponentTreeUI(this);
         setVisible(true);
     }
@@ -320,7 +328,7 @@ public class Jplayer extends JFrame {
 
 
                     try {
-                        Thread.sleep(150); // 1000 milliseconds is one second.
+                        Thread.sleep(300); // 1000 milliseconds is one second.
                     } catch (InterruptedException ex) {
                         System.out.println(ex);
                     }

@@ -23,15 +23,12 @@ public class ImgPanel extends JPanel {
         try {
             URL url = ImgPanel.class.getResource("images/origin-dev.png");
             default_image = ImageIO.read(url);
-
             image=default_image;
-
         } catch (IOException ex) {
             // do nothing
             System.out.println(ex);
 
         }
-
     }
 
     @Override
@@ -65,7 +62,6 @@ public class ImgPanel extends JPanel {
             Mp3File mp3file = new Mp3File(path);
             if (mp3file.hasId3v2Tag()) {
                 ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-
 
 //                title.setText(id3v2Tag.getArtist()+" - "+);
                 String[] tempArr = path.split("/");
