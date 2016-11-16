@@ -30,7 +30,10 @@ public class Jplayer extends JFrame {
 
     // 播放状态
     public JStatus jStatus;
+    // 进度
     public LiveSlider ls;
+    // 音量
+
     // 播放器
     public String path;
     public MediaPlayer mediaPlayer;
@@ -188,7 +191,7 @@ public class Jplayer extends JFrame {
 
         JP_View_init();
 
-        ls = new LiveSlider(300, 60);
+        ls = new LiveSlider(300, 60, true);
         ls.setBorder(null);
         ls.setBounds(440, 200, 300, 60);
 
@@ -257,7 +260,7 @@ public class Jplayer extends JFrame {
                 ls.now_status = jStatus;
 
 //                mediaPlayer.setRate(0.5);
-
+//                mediaPlayer.setVolume(0.1);
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
                     ls.setCurrent(mediaPlayer.getCurrentTime().toSeconds());
                     time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());

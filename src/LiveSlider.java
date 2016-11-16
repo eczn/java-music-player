@@ -1,10 +1,8 @@
 /**
  * Created by eczn on 2016/11/16.
  */
-
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -19,6 +17,7 @@ public class LiveSlider extends JPanel {
     private boolean init;
     private MediaPlayer now_playing;
     public JStatus now_status;
+    public boolean X_MAIN;
 
     public void setPlayer(MediaPlayer P){
         now_playing = P;
@@ -50,14 +49,23 @@ public class LiveSlider extends JPanel {
         g.clearRect(0,0,width,height);
 
         g.setColor(new Color(233,233,233));
-        g.fillRect(0,20,width,height-50);
+
+        if (X_MAIN){
+            g.fillRect(0,20,width,height-50);
+        } else {
+            g.fillRect(0,20,width,height-50);
+        }
 
         g.setColor(new Color(173,180,194));
 
         double temp = percentage * width;
         System.out.println(temp);
 
-        g.fillRect(0,20,(int)temp,height-50);
+        if (X_MAIN){
+            g.fillRect(0,20,(int)temp,height-50);
+        } else {
+            g.fillRect(0,20,(int)temp,height-50);
+        }
 
         if (init){
             System.out.println(width);
@@ -65,7 +73,7 @@ public class LiveSlider extends JPanel {
             init = false;
         }
 
-        System.out.println("");
+
     }
 
     public boolean onEvent;
@@ -92,11 +100,12 @@ public class LiveSlider extends JPanel {
         width = 0;
         mouseInit();
     }
-    public LiveSlider(int W, int H){
+    public LiveSlider(int W, int H, boolean X){
         super();
         init = true;
         height = H;
         width = W;
+        X_MAIN = X;
         mouseInit();
     }
 }
