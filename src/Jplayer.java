@@ -15,6 +15,7 @@ public class Jplayer extends JFrame {
     private ImgPanel contentPane;
     public Container jp;
     public JLabel test;
+    public Livelist livelist;
 
     // 顶部条
     private JPanel theHead;
@@ -67,24 +68,25 @@ public class Jplayer extends JFrame {
         theHead.setBounds(0, 0, 800, 50);
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
-        {
-//            title = new JLabel("jPlayer - FileName.mp3");
-            title = new JLabel("welcome to jPlayer - FileName.mp3");
-            title.setForeground(Color.WHITE);
-            title.setHorizontalAlignment(SwingConstants.CENTER);
-            title.setVerticalAlignment(SwingConstants.CENTER);
-            title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
-//            panel_1.setFont(new Font("Consolas", Font.BOLD, 20));
-            title.setBounds(0, 0, 800, 50);
-            title.setVisible(true);
-            title.repaint();
-            theHead.add(title);
-        }
+
+//        title = new JLabel("jPlayer - FileName.mp3");
+        title = new JLabel("welcome to jPlayer - FileName.mp3");
+        title.setForeground(Color.WHITE);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setVerticalAlignment(SwingConstants.CENTER);
+        title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
+//        panel_1.setFont(new Font("Consolas", Font.BOLD, 20));
+        title.setBounds(0, 0, 800, 50);
+        title.setVisible(true);
+        title.repaint();
+        theHead.add(title);
+
 
         theHead.setVisible(true);
         theHead.repaint();
         contentPane.add(theHead);
 
+        JPanel btns = new JPanel();
 
         URL[] playIcons = {
             Jplayer.class.getResource("images/play_icon.png"),
@@ -104,13 +106,19 @@ public class Jplayer extends JFrame {
                 if (model.isPressed()){
                     System.out.print("!!");
                 }
-                thePlay();
-//                playBtn.setIcon(pre);
+//                thePlay(false);
+                if (jStatus.isPlay){
+                    thePlay(1); // pause;
+                } else {
+                    thePlay(0); // playByPath
+                }
+
             }
 
         });
         playBtn.setVisible(true);
         playBtn.repaint();
+
         contentPane.add(playBtn);
 
         test = new JLabel("!!");
@@ -128,12 +136,12 @@ public class Jplayer extends JFrame {
         nextBtn = new Btns(nextTemp,"next");
         nextBtn.setBorder(null);
         nextBtn.setBounds(680, 130, 60, 60);
-        contentPane.add(nextBtn);
         nextBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-
+                livelist.toNext();
             }
         });
+        contentPane.add(nextBtn);
 
 
         URL[] preTemp = {
@@ -144,8 +152,13 @@ public class Jplayer extends JFrame {
         preBtn = new Btns(preTemp,"pre");
         preBtn.setBorder(null);
         preBtn.setBounds(440, 130, 60, 60);
-        preBtn.setVisible(true);
-        preBtn.repaint();
+//        preBtn.setVisible(true);
+//        preBtn.repaint();
+        preBtn.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                livelist.toPre();
+            }
+        });
         contentPane.add(preBtn);
 
 
@@ -169,73 +182,111 @@ public class Jplayer extends JFrame {
 //                System.out.println("asd");
             }
         });
-
     }
 
-    public Livelist livelist;
+
     public Jplayer(){
         // default path
-        path = "E:/CloudMusic/1.mp3";
+        path = "E:/CloudMusic/1.mp3"; // the fir
         livelist = new Livelist(this);
         jStatus = new JStatus();
 
 
         JP_View_init();
 
-
-
         contentPane.repaint();
-
-
-
-
 //        SwingUtilities.updateComponentTreeUI(this);
-
-        this.setVisible(true);
+        setVisible(true);
     }
 
 //    public boolean playNew;
 
-    public void thePlay(){
+    public void thePlay(int status){
         JFXPanel fxPanel;
         fxPanel = new JFXPanel();
 
-        jStatus.isPlay = !jStatus.isPlay;
-        if (jStatus.isPlay){
-            if (jStatus.nowPlay == null){
-//                path = "file:/E:/CloudMusic/1.mp3";
-                String filePath = "file:/"+path;
-                File Song = new File(path);
 
+        if (status == 0){
+            if (jStatus.isPlay){
+                mediaPlayer.pause();
+                jStatus.isPlay = false;
+            } else if (jStatus.nowPlay == null){
+                File Song = new File(path);
                 URI uri = Song.toURI();
                 String thePath = uri.toASCIIString();
-//                URI uri = new URI(filePath);
-//                URL url = uri.toURL();
-
                 media = new Media(thePath);
                 mediaPlayer = new MediaPlayer(media);
-
                 contentPane.flashImage(path, title);
-//                id3v2Tag.getArtist
 
+                jStatus.isPlay = true;
+                jStatus.nowPlay = mediaPlayer;
+                mediaPlayer.play();
+                jStatus.isPlay = true;
+            } else if (jStatus.nowPlay != null) {
+                mediaPlayer.play();
+                jStatus.isPlay = true;
             }
-            mediaPlayer.play();
-        } else {
+        } else if (status == 1){
             mediaPlayer.pause();
+            jStatus.isPlay = false;
+        } else if (status == 10){
+            if (jStatus.nowPlay != null){
+                mediaPlayer.stop();
+            }
+
+            File Song = new File(path);
+            URI uri = Song.toURI();
+            String thePath = uri.toASCIIString();
+            media = new Media(thePath);
+            mediaPlayer = new MediaPlayer(media);
+            contentPane.flashImage(path, title);
+
+            jStatus.isPlay = true;
             jStatus.nowPlay = mediaPlayer;
+            mediaPlayer.play();
+
         }
 
+//        jStatus.isPlay = !jStatus.isPlay;
 
-        title.repaint();
-        theHead.repaint();
+//        if (jStatus.isPlay){ // false pre
+//            if (jStatus.nowPlay == null){
+////                path = "file:/E:/CloudMusic/1.mp3";
+////                String filePath = "file:/"+path;
+//                File Song = new File(path);
+//
+//                URI uri = Song.toURI();
+//                String thePath = uri.toASCIIString();
+////                URI uri = new URI(filePath);
+////                URL url = uri.toURL();
+//
+//                media = new Media(thePath);
+//                mediaPlayer = new MediaPlayer(media);
+//
+//                contentPane.flashImage(path, title);
+////                id3v2Tag.getArtist
+//                mediaPlayer.play();
+//            } else {
+//                mediaPlayer.stop();
+//                jStatus.nowPlay = null;
+//                thePlay();
+//
+////                mediaPlayer.play();
+//            }
+//
+//        } else {
+//            mediaPlayer.pause();
+//            jStatus.nowPlay = mediaPlayer;
+//        }
+
+//        jStatus.isPlay = !jStatus.isPlay;
+
+
+//        title.repaint();
+//        theHead.repaint();
 //        theHead.updateUI();
-        contentPane.repaint();
-
-
-        System.out.println("before");
-
-
-
+//        contentPane.repaint();
+//        System.out.println("before");
 
 
         mediaPlayer.setOnPlaying(new Runnable() {
@@ -243,33 +294,41 @@ public class Jplayer extends JFrame {
 //                System.out.println("~~");
 //                mediaPlayer.play();
 
-                Duration t;
+                Duration time_left;
 
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
                     // ===================================
 //                    Play_Slider.setValue((int) mediaPlayer.getCurrentTime().toSeconds());
                     // ===================================
-                    t = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
 
-//                    test.getText();
-//                    test.setText("1");
 
-                    System.out.println("12312323");
+                    time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
 
-                    System.out.println(mediaPlayer.getCurrentTime().toSeconds()+"   " + t.toString());
+
+                    System.out.println(mediaPlayer.getCurrentTime().toSeconds()+"   " + time_left.toString());
+
+                    if (time_left.toSeconds() < 0.00001){
+                        break;
+                    }
+
 //                    System.out.println();
 //                    Time_Left.setText(
 //                            Integer.toString((int) t.toMinutes()) + ":" + Integer.toString((int) t.toSeconds() % 60));
 //                    Current_duration.setText(Integer.toString((int) mediaPlayer.getCurrentTime().toMinutes()) + ":"
 //                            + Integer.toString((int) mediaPlayer.getCurrentTime().toSeconds() % 60));
                     // ===================================
+
+
                     try {
-                        Thread.sleep(300); // 1000 milliseconds is one second.
+                        Thread.sleep(150); // 1000 milliseconds is one second.
                     } catch (InterruptedException ex) {
                         System.out.println(ex);
                     }
 
                 }
+
+                System.out.println("exit run");
+                // process;
             }
         });
 

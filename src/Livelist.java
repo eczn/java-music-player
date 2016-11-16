@@ -23,15 +23,16 @@ public class Livelist extends JFrame {
     private JButton listAdd;
     private JButton listSave;
     private JButton listURL;
+    private JButton listDel;
     private Livedown liveDown;
     private boolean isOdd;
+    private int now_play_in;
 
     public void listLoader(){
         vec = new Vector();
         model = new DefaultListModel<>();
         String fileName;
 
-//        model.addElement("Hello");
         String usrHome = System.getProperty("user.home");
         fileName = usrHome+"/FutureSoft/JP/LiveList.data";
 
@@ -46,7 +47,6 @@ public class Livelist extends JFrame {
             while ((tempString = reader.readLine()) != null) {
                 // 显示行号
                 System.out.println("line " + line + ": " + tempString);
-//                vec.add(tempString);
                 model.addElement(tempString);
                 line++;
             }
@@ -77,7 +77,6 @@ public class Livelist extends JFrame {
         }
         try {
             PrintWriter output = new PrintWriter(file);
-//                    output.println("a");
             int i = 0;
             for (i=0;i<model.getSize();i++){
                 output.println(model.getElementAt(i));
@@ -94,13 +93,15 @@ public class Livelist extends JFrame {
         vec = new Vector();
         liveDown = new Livedown();
         listLoader();
-
-//        System.out.println(vec.get(1));
+        now_play_in = 0;
     }
 
-
-    public Livelist(Jplayer jP){
+    public Jplayer jP;
+    public int select_on;
+    public Livelist(Jplayer jP_input){
+        jP = jP_input;
         liveDown = new Livedown();
+        select_on = -1;
         listLoader();
 
         list = new JList<>(model);
@@ -115,43 +116,20 @@ public class Livelist extends JFrame {
 
         setContentPane(list);
 
-//        list.addListSelectionListener(new ListSelectionListener() {
-//            public void valueChanged(ListSelectionEvent e) {
-//                isOdd = !isOdd;
-//                if (isOdd){
-////                    System.out.println( vec.get(list.getSelectedIndex()) );
-////                    URL url = new URL(vec.get(list.getSelectedIndex()))
-////                    String targetFile = vec.get(list.getSelectedIndex());
-////                    jP.path = list.get(list.getSelectedIndex());
-//
-//                    jP.path = model.getElementAt(list.getSelectedIndex());
-//
-//
-//                    jP.jStatus.isPlay = false;
-//                    if (jP.jStatus.isPlay){
-//                        jP.mediaPlayer.stop();
-//                    }
-//                    jP.thePlay();
-//                }
-//            }
-//        });
-
         list.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent mouseEvent) {
                 JList theList = (JList) mouseEvent.getSource();
 //                System.out.println("### "+ mouseEvent.get);
+                int index = theList.locationToIndex(mouseEvent.getPoint());
                 if (mouseEvent.getClickCount() == 2) {
-                    int index = theList.locationToIndex(mouseEvent.getPoint());
 //                    System.out.println("### index: "+ index);
-                    if (index>0){
+                    if (index>=0){
                         jP.path = model.getElementAt(index);
-
-                        jP.jStatus.isPlay = false;
-                        if (jP.jStatus.isPlay){
-                            jP.mediaPlayer.stop();
-                        }
-                        jP.thePlay();
+                        jP.thePlay(10);
+                        now_play_in = index;
                     }
+                } else if (mouseEvent.getClickCount() == 1){
+                    select_on = index;
                 }
             }
         });
@@ -164,6 +142,7 @@ public class Livelist extends JFrame {
         listAdd.setHorizontalAlignment(SwingConstants.CENTER);
         listAdd.setVerticalAlignment(SwingConstants.CENTER);
         listAdd.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 JFileChooser jfc=new JFileChooser();
                 jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES );
@@ -210,27 +189,21 @@ public class Livelist extends JFrame {
         Livelist Livelist_temp = this;
 
 
-        listURL = new JButton("- URL");
+        listURL = new JButton("+ URL");
         listURL.setBounds(160, 390, 80, 30);
         listURL.setHorizontalAlignment(SwingConstants.CENTER);
         listURL.setVerticalAlignment(SwingConstants.CENTER);
         listURL.addMouseListener(new MouseAdapter(){
+            @Override
             public void mouseClicked(MouseEvent e){
                 System.out.println("btn_playBtn click!");
                 String URLInput = JOptionPane.showInputDialog("输入歌曲URL");
-
                 if (URLInput == null){
                     return;
                 } else {
                     liveDown.liveAdown(URLInput, Livelist_temp);
                 }
-
-
-
                 System.out.println("@@@@ From Graph @@@@ " + URLInput);
-//                JFileChooser myFC = new JFileChooser();
-//                new FileChooser(listAdd);
-
             }
         });
         listURL.setVisible(true);
@@ -238,19 +211,51 @@ public class Livelist extends JFrame {
         list.add(listURL);
         list.repaint();
 
+        listDel = new JButton("- del");
+        listDel.setBounds(240, 390, 80, 30);
+        listDel.setHorizontalAlignment(SwingConstants.CENTER);
+        listDel.setVerticalAlignment(SwingConstants.CENTER);
+        listDel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (select_on >= 0){
+//                    System.out.println(select_on);
+                    model.removeElementAt(select_on);
+                }
 
-
-
-
-//
-//        String ddd = JOptionPane.showInputDialog("输入歌曲URL");
-//        liveDown.liveAdown(ddd, this);
+                listSave();
+            }
+        });
+        listDel.setVisible(true);
+        listDel.repaint();
+        list.add(listDel);
 
     }
     JButton open;
 
     public void addElem(String target){
         model.addElement(target);
+
+    }
+
+    public void toNext(){
+        now_play_in++;
+        if (now_play_in > model.getSize()-1){
+            now_play_in = model.getSize()-1;
+            return;
+        }
+        jP.path = model.getElementAt(now_play_in);
+        jP.thePlay(10);
+
+    }
+    public void toPre(){
+        now_play_in--;
+        if (now_play_in < 0){
+            now_play_in = 0;
+            return;
+        }
+        jP.path = model.getElementAt(now_play_in);
+        jP.thePlay(10);
 
     }
 

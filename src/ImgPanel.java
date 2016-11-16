@@ -16,9 +16,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class ImgPanel extends JPanel {
-
     private static BufferedImage image;
     private static BufferedImage default_image;
+
     public ImgPanel() {
         try {
             URL url = ImgPanel.class.getResource("images/origin-dev.png");
@@ -31,6 +31,7 @@ public class ImgPanel extends JPanel {
             System.out.println(ex);
 
         }
+
     }
 
     @Override
@@ -53,6 +54,7 @@ public class ImgPanel extends JPanel {
         }
         this.paintComponent(getGraphics());
         this.paintAll(getGraphics());
+
     }
 
     // paint through by id3

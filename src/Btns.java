@@ -1,6 +1,9 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.io.IOException;
 import java.net.URL;
 
 public class Btns extends JButton {
@@ -14,7 +17,8 @@ public class Btns extends JButton {
     public boolean justText;
 
     public Btns() { // construtor
-
+        btnName = "btn";
+        justText = false;
     }
 
 //    public Btns(ImageIcon ii){
@@ -35,9 +39,42 @@ public class Btns extends JButton {
         btnName = text;
         imgSrc = ImageSrc_output;
         justText = false;
-    }
 
+//        this.paintAll(getGraphics());
+
+
+//        Color c = new Color(0,0,0);
+//        g.setColor(c);
+//
+//        Toolkit tool = this.getToolkit();
+//        Image image = tool.getImage(imgSrc[1]);
+//        g.drawImage(image, 0, 0, new Color(255,255,255), null);
+        firInit = true;
+    }
+    public boolean firInit;
+    @Override
     protected void paintComponent(Graphics g) {
+//        if (firInit){
+//            try {
+//                System.out.println("!");
+//                BufferedImage image;
+//                URL url = ImgPanel.class.getResource("images/origin-dev.png");
+//                image = ImageIO.read(url);
+//
+//                Image tmp = image.getScaledInstance(60,60,Image.SCALE_SMOOTH);
+//                BufferedImage dimg = new BufferedImage(380, 435, BufferedImage.TYPE_INT_ARGB);
+//
+//                Graphics2D g2d = dimg.createGraphics();
+//                g2d.drawImage(tmp, 0, 0, null);
+//                g2d.dispose();
+//                g.drawImage(dimg, 0, 0, null);
+//                firInit = false;
+//            } catch (IOException e){
+//                e.printStackTrace();
+//            }
+//        }
+
+
         if (justText){
             g.drawString(btnName, 0,0);
         } else {
@@ -81,5 +118,7 @@ public class Btns extends JButton {
     //            return;
             }
         }
+
+        repaint();
     }
 }
