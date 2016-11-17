@@ -36,7 +36,7 @@ public class Btns extends JButton {
 //        imgSrc = ImageSrc_output;
 //    }
     public Btns(URL[] ImageSrc_output, String text){
-        super(text);
+//        super(text);
         btnName = text;
         imgSrc = ImageSrc_output;
         justText = false;
@@ -49,27 +49,39 @@ public class Btns extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+//        g.setColor(new Color(255,255,255,0.0f));
+
+//        g.clearRect(0,0,60,60);
+//        g.clearRect(0,0,60,60);
+
         if (justText){
             g.drawString(btnName, 0,0);
         } else {
+
+
             ButtonModel model = getModel();
-            g.clearRect(0,0,60,60);
+//            g.clearRect(0,0,60,60);
+
             if (model.isPressed()) {
                 Color c = new Color(0,0,0);
                 g.setColor(c);
 
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[1]);
-                g.drawImage(image, 0, 0, new Color(255,255,255), null);
+
+//                g.drawImage(image, 0, 0, new Color(255,255,255), null);
+                g.drawImage(image, 0, 0, null);
 
             } else {
                 Color c = new Color(120,120,120);
                 g.setColor(c);
 
-                g.clearRect(0,0,60,60);
+//                g.clearRect(0,0,60,60);
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[0]);
                 g.drawImage(image, 0, 0, new Color(255,255,255), null);
+//                g.drawImage(image, 0, 0, null);
             }
 
             if (model.isRollover()){ // hover
@@ -77,14 +89,29 @@ public class Btns extends JButton {
                 g.setColor(c);
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[2]);
-                g.drawImage(image, 0, 0, new Color(255,255,255), null);
+//                g.drawImage(image, 0, 0, new Color(255,255,255), null);
+                g.drawImage(image, 0, 0, null);
 
             }
         }
 
         if (firInit){
             repaint();
+            g.clearRect(0,0,60,60);
             firInit = false;
         }
+
+//        BufferedImage bir =  new BufferedImage(60, 60, BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D birg2d = (Graphics2D) bir.getGraphics();
+//        birg2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_ATOP, 1.0f));
+//        g.drawImage(bir, 0, 0, null);
+
+//        int i,j;
+//        g.setColor(new Color(255,255,255,0));
+//        System.out.println(g.getColor());
+//        for (i=0;i<60;i++){
+////            System.out.println(i);
+//            g.drawLine(0,i,60,i);
+//        }
     }
 }

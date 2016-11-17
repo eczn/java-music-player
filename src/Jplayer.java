@@ -165,7 +165,12 @@ public class Jplayer extends JFrame {
         };
         listBtn = new Btns(listTemp,"list");
         listBtn.setBorder(null);
-        listBtn.setBounds(700, 350, 60, 60);
+//        listBtn.setBounds(700, 350, 60, 60);
+        listBtn.setBounds(0, 350, 60, 60);
+//        listBtn.setBackground(new Color(0,0,0,0.0f));
+        listBtn.setBackground(null);
+        listBtn.setOpaque(false);
+
         listBtn.setVisible(true);
         listBtn.repaint();
         contentPane.add(listBtn);

@@ -4,6 +4,7 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
 import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -37,7 +38,7 @@ public class ImgPanel extends JPanel {
         BufferedImage dimg = new BufferedImage(380, 435, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = dimg.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
+        g2d.drawImage(tmp, 0, 0, new Color(255,255,255),null);
         g2d.dispose();
         g.drawImage(dimg, 0, 0, null);
     }
