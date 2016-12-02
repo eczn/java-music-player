@@ -231,18 +231,16 @@ public class Livelist extends JFrame {
         list.add(listDel);
 
     }
-    JButton open;
 
     public void addElem(String target){
         model.addElement(target);
-
     }
 
     public void toNext(){
         now_play_in++;
         if (now_play_in > model.getSize()-1){
-            now_play_in = model.getSize()-1;
-            return;
+            now_play_in = 0;
+//            return;
         }
         jP.path = model.getElementAt(now_play_in);
         jP.thePlay(10);
@@ -251,8 +249,8 @@ public class Livelist extends JFrame {
     public void toPre(){
         now_play_in--;
         if (now_play_in < 0){
-            now_play_in = 0;
-            return;
+            now_play_in = model.getSize()-1;
+//            return;
         }
         jP.path = model.getElementAt(now_play_in);
         jP.thePlay(10);

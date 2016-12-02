@@ -31,10 +31,6 @@ public class Btns extends JButton {
         justText = true;
     }
 
-//    public Btns(String[] ImageSrc_output, String text){
-//        super(text);
-//        imgSrc = ImageSrc_output;
-//    }
     public Btns(URL[] ImageSrc_output, String text){
 //        super(text);
         btnName = text;

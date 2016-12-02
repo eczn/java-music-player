@@ -13,61 +13,62 @@ public class Livedown extends JFrame {
 //    public DataEcho tHpro;
 //    public JTextArea process;
 //    public DefaultStringModel
-    public void live_callback(){
+    public Download download;
 
+    public Livedown() {
+        setBounds(200, 150, 500, 150);
+        process = new JLabel("下载进度");
+        process.setBounds(50,0,200,150);
+        process.setVerticalAlignment(SwingConstants.CENTER);
+        process.setHorizontalAlignment(SwingConstants.CENTER);
+        process.repaint();
+        setContentPane(process);
     }
 
-    private boolean httpDownload(String httpUrl, String saveFile){
-        int bytesum = 0;
-        int byteread = 0;
+    public void liveAdown(String urlStr, Livelist ll){
+        String usrHome = System.getProperty("user.home");
+//        String softHome = "/FutureSoft/JP/";
 
-        URL url = null;
-        try {
-            url = new URL(httpUrl);
-        } catch (MalformedURLException e1) {
-            e1.printStackTrace();
-            return false;
-        }
 
-        try {
-            URLConnection conn = url.openConnection();
-//            http://eczn.website/mzt.mp3
-            InputStream inStream = conn.getInputStream();
-            FileOutputStream fs = new FileOutputStream(saveFile);
+        String[] urlStrs = urlStr.split("/");
 
-            // buf 2MB
-            byte[] buffer = new byte[2048000];
-//            setVisible(true);
-//            process.setVisible(true);
-//            repaint();
-//            process.repaint();
-//            process.setText("@@下载进度：");
-//            tHpro.start();
-//            tHpro.total = getURLFileLength(httpUrl);
-//            process.setText("下载中 耐心等待");
+        String fileName = urlStrs[urlStrs.length-1];
 
-            while ((byteread = inStream.read(buffer)) != -1) {
-//                tHpro.now_for = bytesum;
-                bytesum += byteread;
-                System.out.println(bytesum);
-                fs.write(buffer, 0, byteread);
-            }
-//            tHpro.onReady = false;
+//        download.run(urlStr, usrHome+"/FutureSoft/JP/Livedown/"+fileName);
+//        download.run("http://frandre.cc/mzt.mp3", usrHome+"/FutureSoft/JP/Livedown/"+fileName);
+        download = new Download(process, urlStr, usrHome+"/FutureSoft/JP/Livedown/"+fileName);
+        download.start();
+        setVisible(true);
+    }
 
-            process.setText("完成 已保存在用户目录下的 FutureSoft/JP/Livedown 里");
-//            process.setVisible(false);
-//            setVisible(false);
+    public static void main(String[] args){
+        Livedown temp = new Livedown();
+        temp.setVisible(true);
+    }
 
-            return true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-//            live_callback();
-        }
+}
+
+// word process dis
+class Download implements Runnable {
+    private JLabel targetContainer;
+    public int now_for;
+    public int total;
+    public boolean onReady;
+    public String httpUrl;
+    public String saveFile;
+    Thread toDownload;
+
+    public Download(JLabel out, String url, String toWhere){
+        super();
+        httpUrl = url;
+        saveFile = toWhere;
+
+        targetContainer = out;
+        now_for = 0;
+        total = getURLFileLength(httpUrl);
+        targetContainer.setText("下载中");
+
+        toDownload = new Thread(this);
     }
 
     public int getURLFileLength(String urlStr){
@@ -80,8 +81,6 @@ public class Livedown extends JFrame {
             fileLength = urlcon.getContentLength();
             System.out.println("@@@@@@ fileLength!!: "+fileLength);
 
-
-//            return fileLength;
         } catch (MalformedURLException GetLengthE ){
             // url faild
             fileLength = -1;
@@ -97,108 +96,67 @@ public class Livedown extends JFrame {
         return fileLength;
     }
 
-    public void liveAdown(String urlStr, Livelist ll){
-        String usrHome = System.getProperty("user.home");
-//        String softHome = "/FutureSoft/JP/";
-        setVisible(true);
-        String[] urlStrs = urlStr.split("/");
-
-        String fileName = urlStrs[urlStrs.length-1];
-
-        Boolean dlSuccess = false;
-
-        dlSuccess = httpDownload(urlStr, usrHome+"/FutureSoft/JP/Livedown/"+fileName);
-
-        if (dlSuccess){
-            ll.addElem(usrHome+"/FutureSoft/JP/Livedown/"+fileName);
-        } else {
-
+    public void start(){
+        try {
+            toDownload.start();
+        } catch (Exception exe){
+            exe.printStackTrace();
         }
     }
 
-
-    public Livedown() {
-
-//        setVisible(true);
-        setBounds(0, 0, 200, 150);
-
-
-        process = new JLabel("下载进度");
-        process.setBounds(50,0,200,150);
-        process.setVisible(true);
-        process.setVerticalAlignment(SwingConstants.CENTER);
-        process.setHorizontalAlignment(SwingConstants.CENTER);
-        process.repaint();
-        add(process);
-//        tHpro = new DataEcho(process);
-
-
-
-
-
-//        System.out.println("Livedown!");
-//        int size;
-//        String temp = "http://localhost/music/1.mp3";
-//        size = getURLFileLength(temp);
-//        System.out.println("theSize@@@@ "+ size);
-
-    }
-
-    public static void main(String[] args){
-        Livedown temp = new Livedown();
-    }
-
-}
-
-// word process dis
-class DataEcho extends Thread {
-    private JLabel targetContainer;
-    public int now_for;
-    public int total;
-    public boolean onReady;
-
-    public DataEcho(JLabel out){
-        targetContainer = out;
-        now_for = 0;
-        total = 999999;
-        targetContainer.setText("下载中");
-        onReady = true;
-    }
-
-    // thread
     public void run(){
-//        int i = 0;
-
-
-//        targetContainer.setText("to begin download");
         String temp = targetContainer.getText();
 
-        while ( onReady ){
+//        while ( onReady ){
 //            targetContainer.setText("下载进度："+now_for+"  /  "+total);
             targetContainer.updateUI();
-//            if (targetContainer.getText() == temp){
-//                temp = targetContainer.getText();
-//                System.out.println("@@ 1");
+
+//            System.out.println("Thread!  " + now_for);
 
 
-
-                targetContainer.setText("下载进度："+now_for+"  /  "+total);
-                targetContainer.repaint();
-//            } else {
-//                System.out.println("@@ 2");
-//            }
+            int bytesum = 0;
+            int byteread = 0;
+            URL url = null;
+            try {
+                url = new URL(httpUrl);
+            } catch (MalformedURLException e1) {
+                e1.printStackTrace();
+                return;
+            }
 
             try {
-                Thread.sleep(100);
-//                targetContainer.repaint();
-//                targetContainer.setText("下载进度："+now_for+"  /  "+total);
-//                targetContainer.repaint();
+                URLConnection conn = url.openConnection();
+                InputStream inStream = conn.getInputStream();
+                FileOutputStream fs = new FileOutputStream(saveFile);
 
+                // buf 1KB
+                byte[] buffer = new byte[2048];
+
+                while ((byteread = inStream.read(buffer)) != -1) {
+                    bytesum += byteread;
+                    System.out.println(bytesum);
+                    targetContainer.setText("下载进度："+bytesum+"  /  "+total);
+                    fs.write(buffer, 0, byteread);
+                    Thread.sleep(300);
+                }
+
+                fs.close();
+                targetContainer.setText("完成 已保存在用户目录下的 FutureSoft/JP/Livedown 里");
+
+                return;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
             } catch (InterruptedException IntE){
                 System.out.println("InterruptedException: livedown");
-                System.out.println(IntE);
+            } finally {
+
             }
-            System.out.println("              Thread!  " + now_for);
-        }
+
+
     }
+
 }

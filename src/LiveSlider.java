@@ -59,7 +59,7 @@ public class LiveSlider extends JPanel {
         g.setColor(new Color(173,180,194));
 
         double temp = percentage * width;
-        System.out.println(temp);
+//        System.out.println(temp);
 
         if (X_MAIN){
             g.fillRect(0,20,(int)temp,height-50);

@@ -13,8 +13,6 @@ import java.net.*;
 public class Jplayer extends JFrame {
     // main container
     private ImgPanel contentPane;
-    public Container jp;
-    public JLabel test;
     public Livelist livelist;
 
     // 顶部条
@@ -26,7 +24,7 @@ public class Jplayer extends JFrame {
     private Btns nextBtn;
     private Btns preBtn;
     private Btns listBtn;
-    private Btns slider;
+//    private Btns slider;
 
     // 播放状态
     public JStatus jStatus;
@@ -39,14 +37,14 @@ public class Jplayer extends JFrame {
     public MediaPlayer mediaPlayer;
     private Media media;
 
-    // List
-    private Vector<String> PlayList;
-
     public static void main(String[] args){
         Jplayer myP =  new Jplayer();
     }
+
     private void JP_View_init(){
         setTitle("JPlayer");
+
+        // 程序图标
         setIconImage(
                 Toolkit.getDefaultToolkit().getImage(
                         Jplayer.class.getResource("images/clio-emt-speaker.png")
@@ -55,32 +53,30 @@ public class Jplayer extends JFrame {
         setResizable(false);
         // 设置背景颜色
         setBackground(Color.WHITE);
-        setBounds(200, 100, 800, 435);
+        // 设置位置
+        setBounds(200, 100, 855, 435);
         // 点右上角按钮的时候的默认操作，这里设置为  EXIT_ON_CLOSE 也就是直接退出
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 
         contentPane = new ImgPanel();
-//        contentPane.setVisible(true);
-//        contentPane.repaint();
+
         Container jp = getContentPane();
         jp.add(contentPane);
-//        setContentPane(jp);
         contentPane.setLayout(null);
         contentPane.setBackground(new Color(244, 244, 244));
 
         theHead = new JPanel();
-        theHead.setBounds(0, 0, 800, 50);
+        theHead.setBounds(0, 0, 855, 50);
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
 
-//        title = new JLabel("jPlayer - FileName.mp3");
-        title = new JLabel("welcome to jPlayer - FileName.mp3");
+        title = new JLabel("welcome, Click the list and choose music");
         title.setForeground(Color.WHITE);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setVerticalAlignment(SwingConstants.CENTER);
         title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
 //        panel_1.setFont(new Font("Consolas", Font.BOLD, 20));
-        title.setBounds(0, 0, 800, 50);
+        title.setBounds(0, 0, 855, 50);
         title.setVisible(true);
         title.repaint();
         theHead.add(title);
@@ -102,7 +98,7 @@ public class Jplayer extends JFrame {
         playBtn.setBorder(null);
         playBtn.setSize(60, 60);
         playBtn.setVisible(true);
-        playBtn.setBounds(560, 130, 60, 60);
+        playBtn.setBounds(615, 130, 60, 60);
         playBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 //                playBtn.setIcon(temp);
@@ -132,7 +128,7 @@ public class Jplayer extends JFrame {
         };
         nextBtn = new Btns(nextTemp,"next");
         nextBtn.setBorder(null);
-        nextBtn.setBounds(680, 130, 60, 60);
+        nextBtn.setBounds(735, 130, 60, 60);
         nextBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 livelist.toNext();
@@ -147,7 +143,7 @@ public class Jplayer extends JFrame {
         };
         preBtn = new Btns(preTemp,"pre");
         preBtn.setBorder(null);
-        preBtn.setBounds(440, 130, 60, 60);
+        preBtn.setBounds(495, 130, 60, 60);
 //        preBtn.setVisible(true);
 //        preBtn.repaint();
         preBtn.addMouseListener(new MouseAdapter(){
@@ -157,7 +153,6 @@ public class Jplayer extends JFrame {
         });
         contentPane.add(preBtn);
 
-
         URL[] listTemp = {
                 Jplayer.class.getResource("images/list_icon.png"),
                 Jplayer.class.getResource("images/list-pressed.png"),
@@ -166,7 +161,7 @@ public class Jplayer extends JFrame {
         listBtn = new Btns(listTemp,"list");
         listBtn.setBorder(null);
 //        listBtn.setBounds(700, 350, 60, 60);
-        listBtn.setBounds(0, 350, 60, 60);
+        listBtn.setBounds(745, 350, 60, 60);
 //        listBtn.setBackground(new Color(0,0,0,0.0f));
         listBtn.setBackground(null);
         listBtn.setOpaque(false);
@@ -198,7 +193,7 @@ public class Jplayer extends JFrame {
 
         ls = new LiveSlider(300, 60, true);
         ls.setBorder(null);
-        ls.setBounds(440, 200, 300, 60);
+        ls.setBounds(495, 200, 300, 60);
 
         contentPane.repaint();
         contentPane.add(ls);
@@ -256,6 +251,7 @@ public class Jplayer extends JFrame {
         }
 
         mediaPlayer.setOnPlaying(new Runnable(){
+            @Override
             public void run() {
                 Duration time_left;
 
@@ -264,31 +260,30 @@ public class Jplayer extends JFrame {
                 ls.setPlayer(mediaPlayer);
                 ls.now_status = jStatus;
 
-//                mediaPlayer.setRate(0.5);
-//                mediaPlayer.setVolume(0.1);
+                // 播放的时候 进度条要用到这个循环
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
                     ls.setCurrent(mediaPlayer.getCurrentTime().toSeconds());
                     time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
 
-                    if (time_left.toSeconds() < 0.00001){
-                        System.out.println("EXIT!");
-                        break;
-                    }
+
+//                    if (time_left.toSeconds() < 0.00001){
+//                        System.out.println("EXIT!");
+//                        break;
+//                    }
 
                     try {
-                        Thread.sleep(500); // 1000 milliseconds is one second.
+                        Thread.sleep(500);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                 }
             }
         });
+
         mediaPlayer.setOnEndOfMedia(new Runnable(){
             public void run(){
                 System.out.println("END!");
-                jStatus.isPlay = false;
-
-                // 单曲循环的问题
+                livelist.toNext();
             }
         });
 

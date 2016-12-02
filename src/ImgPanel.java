@@ -34,8 +34,8 @@ public class ImgPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Image tmp = image.getScaledInstance(380, 435, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(380, 435, BufferedImage.TYPE_INT_ARGB);
+        Image tmp = image.getScaledInstance(435, 435, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(435, 435, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = dimg.createGraphics();
         g2d.drawImage(tmp, 0, 0, new Color(255,255,255),null);
