@@ -18,8 +18,6 @@ public class Livelist extends JFrame {
     DefaultListModel<String> model;
 
     private ImgPanel contentPane;
-//    private Btns listAdd;
-//    private Btns listSave;
     private JButton listAdd;
     private JButton listSave;
     private JButton listURL;
@@ -39,19 +37,26 @@ public class Livelist extends JFrame {
         File file = new File(fileName);
         BufferedReader reader = null;
         try {
-            System.out.println("以行为单位读取文件内容，一次读一整行：");
-            reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
-            int line = 1;
-            // 一次读入一行，直到读入null为文件结束
-            while ((tempString = reader.readLine()) != null) {
-                // 显示行号
-                System.out.println("line " + line + ": " + tempString);
-                model.addElement(tempString);
-                line++;
-            }
 
-            reader.close();
+            if (file.exists()){
+                System.out.println("以行为单位读取文件内容，一次读一整行：");
+                reader = new BufferedReader(new FileReader(file));
+                String tempString = null;
+                int line = 1;
+                // 一次读入一行，直到读入null为文件结束
+                while ((tempString = reader.readLine()) != null) {
+                    // 显示行号
+                    System.out.println("line " + line + ": " + tempString);
+                    model.addElement(tempString);
+                    line++;
+                }
+                reader.close();
+            } else {
+                System.out.println("文件不存在，故自动创建一个");
+                listSave();
+                FileNotFoundException temp = new FileNotFoundException();
+                throw temp;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -107,14 +112,18 @@ public class Livelist extends JFrame {
         list = new JList<>(model);
         isOdd = true;
 
+        JScrollPane jsp = new JScrollPane(list);
+
         setTitle("Live-List");
-        setVisible(true);
+
+        setVisible(false);
 
         setResizable(false);
 
         setBounds(300, 200, 400, 450);
 
-        setContentPane(list);
+        // !!
+        setContentPane(jsp);
 
         list.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -136,8 +145,9 @@ public class Livelist extends JFrame {
         setBackground(Color.WHITE);
 
 
+
+
         listAdd = new JButton("+ add");
-//        listAdd = new JButton("+ add");
         listAdd.setBounds(0, 390, 80, 30);
         listAdd.setHorizontalAlignment(SwingConstants.CENTER);
         listAdd.setVerticalAlignment(SwingConstants.CENTER);
@@ -183,7 +193,7 @@ public class Livelist extends JFrame {
         list.setVisible(true);
         list.repaint();
 
-        this.setVisible(true);
+
 
 
         Livelist Livelist_temp = this;

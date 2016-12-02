@@ -12,8 +12,8 @@ public class Btns extends JButton {
     // imgSrc[0]: normal Status Icon src
     // imgSrc[1]: onClicked Status Icon src
     // imgSrc[2]: Hover Status Icon src
+
     protected URL[] imgSrc;
-//    protected Image[] imgs;
     public String btnName;
     public boolean justText;
 
@@ -22,9 +22,6 @@ public class Btns extends JButton {
         justText = false;
     }
 
-//    public Btns(ImageIcon ii){
-//        super(ii);
-//    }
     public Btns(String text){
         super(text);
         btnName = text;
@@ -47,7 +44,6 @@ public class Btns extends JButton {
         super.paintComponent(g);
 
 //        g.setColor(new Color(255,255,255,0.0f));
-
 //        g.clearRect(0,0,60,60);
 //        g.clearRect(0,0,60,60);
 

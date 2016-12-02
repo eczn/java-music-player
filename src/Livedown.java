@@ -9,7 +9,6 @@ public class Livedown extends JFrame {
     public JLabel process;
     public Download download;
 
-
     public Livedown() {
         setBounds(200, 150, 500, 150);
         process = new JLabel("下载进度");

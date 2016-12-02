@@ -24,7 +24,6 @@ public class Jplayer extends JFrame {
     private Btns nextBtn;
     private Btns preBtn;
     private Btns listBtn;
-//    private Btns slider;
 
     // 播放状态
     public JStatus jStatus;
@@ -43,7 +42,6 @@ public class Jplayer extends JFrame {
 
     private void JP_View_init(){
         setTitle("JPlayer");
-
         // 程序图标
         setIconImage(
                 Toolkit.getDefaultToolkit().getImage(
@@ -75,18 +73,14 @@ public class Jplayer extends JFrame {
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setVerticalAlignment(SwingConstants.CENTER);
         title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
-//        panel_1.setFont(new Font("Consolas", Font.BOLD, 20));
         title.setBounds(0, 0, 855, 50);
         title.setVisible(true);
         title.repaint();
         theHead.add(title);
 
-
         theHead.setVisible(true);
         theHead.repaint();
         contentPane.add(theHead);
-
-        JPanel btns = new JPanel();
 
         URL[] playIcons = {
             Jplayer.class.getResource("images/play_icon.png"),
@@ -101,12 +95,10 @@ public class Jplayer extends JFrame {
         playBtn.setBounds(615, 130, 60, 60);
         playBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-//                playBtn.setIcon(temp);
                 ButtonModel model = playBtn.getModel();
                 if (model.isPressed()){
                     System.out.print("!!");
                 }
-//                thePlay(false);
                 if (jStatus.isPlay){
                     thePlay(1); // pause;
                 } else {
@@ -144,8 +136,6 @@ public class Jplayer extends JFrame {
         preBtn = new Btns(preTemp,"pre");
         preBtn.setBorder(null);
         preBtn.setBounds(495, 130, 60, 60);
-//        preBtn.setVisible(true);
-//        preBtn.repaint();
         preBtn.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 livelist.toPre();
@@ -160,28 +150,20 @@ public class Jplayer extends JFrame {
         };
         listBtn = new Btns(listTemp,"list");
         listBtn.setBorder(null);
-//        listBtn.setBounds(700, 350, 60, 60);
         listBtn.setBounds(745, 350, 60, 60);
-//        listBtn.setBackground(new Color(0,0,0,0.0f));
         listBtn.setBackground(null);
         listBtn.setOpaque(false);
 
         listBtn.setVisible(true);
         listBtn.repaint();
         contentPane.add(listBtn);
-//        Jplayer jp2other = this;
         listBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-//                String[] temp = {"E:/CloudMusic/1.mp3", "E:/CloudMusic/Diri - Diri Da Dance.mp3", "E:/CloudMusic/2.mp3", "four"};
-//                new Livelist(temp, jp2other);
-                livelist.setVisible(true);
-//                System.out.println("asd");
+                jStatus.isListOpen = !jStatus.isListOpen;
+                livelist.setVisible(jStatus.isListOpen);
             }
         });
-
-
     }
-
 
     public Jplayer(){
         // default path

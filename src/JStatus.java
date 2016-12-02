@@ -5,6 +5,7 @@ public class JStatus {
     public boolean isPlay;
     public MediaPlayer nowPlay;
     public boolean isListed;
+    public boolean isListOpen;
     public int status;
 
 //    private boolean
@@ -12,7 +13,7 @@ public class JStatus {
     public JStatus(){
         isPlay = false;
         isListed = false;
-
+        isListOpen = false;
         nowPlay = null;
 //        status = 0;
     }

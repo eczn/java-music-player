@@ -47,7 +47,6 @@ public class LiveSlider extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         g.clearRect(0,0,width,height);
-
         g.setColor(new Color(233,233,233));
 
         if (X_MAIN){
