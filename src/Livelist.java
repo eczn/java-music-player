@@ -201,7 +201,7 @@ public class Livelist extends JFrame {
                 if (URLInput == null){
                     return;
                 } else {
-                    liveDown.liveAdown(URLInput, Livelist_temp);
+                    liveDown.callHimToDownloadIt(URLInput, Livelist_temp);
                 }
                 System.out.println("@@@@ From Graph @@@@ " + URLInput);
             }
