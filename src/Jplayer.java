@@ -4,13 +4,71 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.swing.*;
 import java.awt.*;
+
+import java.awt.datatransfer.*;
+import java.awt.dnd.*;
+
 import java.awt.event.*;
 import java.net.URI;
 import java.util.*;
 import java.io.*;
 import java.net.*;
+import java.util.List;
 
-public class Jplayer extends JFrame {
+public class Jplayer extends JFrame implements DropTargetListener {
+    @Override
+    public void dropActionChanged(DropTargetDragEvent dtde) {
+        System.out.println("dropActionChanged");
+    }
+    @Override
+    public void dragEnter(DropTargetDragEvent dtde) {
+        System.out.println("dragEnter");
+    }
+    @Override
+    public void dragExit(DropTargetEvent dte) {
+        System.out.println("dragExit");
+    }
+    @Override
+    public void dragOver(DropTargetDragEvent dtde) {
+//        System.out.println("dragOver");
+    }
+    @Override
+    public void drop(DropTargetDropEvent dtde) {
+        System.out.println("drop");
+        try {
+//            Transferable tr = dtde.getTransferable();
+
+            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+
+                List list = (List) (
+                        dtde.getTransferable()
+                        .getTransferData(DataFlavor.javaFileListFlavor)
+                );
+                Iterator iterator = list.iterator();
+                while (iterator.hasNext()) {
+                    File f = (File) iterator.next();
+                    System.out.println("拖入的文件是："+f.getAbsolutePath());
+                }
+                dtde.dropComplete(true);
+                //this.updateUI();
+            } else {
+                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                Object drop2here = dtde.getTransferable().getTransferData(DataFlavor.stringFlavor);
+
+                livelist.addElem(drop2here.toString());
+
+                System.out.println(dtde.getTransferable().getTransferData(DataFlavor.stringFlavor));
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (UnsupportedFlavorException ufe) {
+            ufe.printStackTrace();
+        }
+    }
+
+
+
     // main container
     private ImgPanel contentPane;
     public Livelist livelist;
@@ -39,6 +97,7 @@ public class Jplayer extends JFrame {
 
     public static void main(String[] args){
         Jplayer myP =  new Jplayer();
+        new DropTarget(myP, DnDConstants.ACTION_COPY_OR_MOVE, myP);
     }
 
     private void JP_View_init(){
@@ -151,7 +210,7 @@ public class Jplayer extends JFrame {
         };
         listBtn = new Btns(listTemp,"list");
         listBtn.setBorder(null);
-        listBtn.setBounds(745, 350, 60, 60);
+        listBtn.setBounds(745, 320, 60, 30);
         listBtn.setBackground(null);
         listBtn.setOpaque(false);
 
@@ -165,8 +224,8 @@ public class Jplayer extends JFrame {
             }
         });
 
-        volBar = new Vol();
-        volBar.setBounds(495, 355, 160, 160);
+        volBar = new Vol(this);
+        volBar.setBounds(435, 355, 420, 160);
         contentPane.add(volBar);
 
     }
@@ -245,13 +304,13 @@ public class Jplayer extends JFrame {
                 ls.setPlayer(mediaPlayer);
                 ls.now_status = jStatus;
 
-
+                mediaPlayer.setVolume(volBar.now_vol);
                 // 播放的时候 进度条要用到这个循环
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
                     ls.setCurrent(mediaPlayer.getCurrentTime().toSeconds());
                     time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
-                    System.out.println("Vol: "+ mediaPlayer.getVolume());
-
+//                    System.out.println("Vol: "+ mediaPlayer.getVolume());
+//                    mediaPlayer.setVolume(volBar.now_vol);
 //                    if (time_left.toSeconds() < 0.00001){
 //                        System.out.println("EXIT!");
 //                        break;
@@ -276,5 +335,8 @@ public class Jplayer extends JFrame {
         this.repaint();
     }
 
+    public void setMediaPlayerVol(Double vol){
+        mediaPlayer.setVolume(vol);
+    }
 
 }
