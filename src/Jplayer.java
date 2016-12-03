@@ -14,6 +14,7 @@ public class Jplayer extends JFrame {
     // main container
     private ImgPanel contentPane;
     public Livelist livelist;
+    public Vol volBar;
 
     // 顶部条
     private JPanel theHead;
@@ -163,11 +164,16 @@ public class Jplayer extends JFrame {
                 livelist.setVisible(jStatus.isListOpen);
             }
         });
+
+        volBar = new Vol();
+        volBar.setBounds(495, 355, 160, 160);
+        contentPane.add(volBar);
+
     }
 
     public Jplayer(){
         // default path
-        path = "E:/CloudMusic/1.mp3"; // the fir
+        path = null;
         livelist = new Livelist(this);
         jStatus = new JStatus();
 
@@ -180,16 +186,13 @@ public class Jplayer extends JFrame {
         contentPane.repaint();
         contentPane.add(ls);
 
-//        SwingUtilities.updateComponentTreeUI(this);
         setVisible(true);
     }
 
 //    public boolean playNew;
-
     public void thePlay(int status){
         JFXPanel fxPanel;
         fxPanel = new JFXPanel();
-
 
         if (status == 0){
             if (jStatus.isPlay){
@@ -242,11 +245,12 @@ public class Jplayer extends JFrame {
                 ls.setPlayer(mediaPlayer);
                 ls.now_status = jStatus;
 
+
                 // 播放的时候 进度条要用到这个循环
                 while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
                     ls.setCurrent(mediaPlayer.getCurrentTime().toSeconds());
                     time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
-
+                    System.out.println("Vol: "+ mediaPlayer.getVolume());
 
 //                    if (time_left.toSeconds() < 0.00001){
 //                        System.out.println("EXIT!");
