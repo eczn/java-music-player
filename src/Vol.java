@@ -2,35 +2,38 @@ import javafx.scene.media.MediaPlayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 /**
  * Created by eczn on 2016/12/3.
  */
-//implements Runnable
-public class Vol extends Canvas {
-    public double now_vol;
 
+public class Vol extends Canvas implements Runnable {
+    public double now_vol;
+    public Jplayer jplayer;
     public int width;
     public int height;
-
+    public boolean isPressed;
     Thread thread_vol;
 
-    public Vol(){
+    public Vol(Jplayer JPLAYER){
         super();
+        jplayer = JPLAYER;
 //        mp = mediaplayer;
-
+        now_vol = 1.0;
+        System.out.println("!@#$!: "+getSize().getWidth());
+//        now_at = (int)(this.getSize().getWidth());
+        now_at = 420;
+        width = 420;
         setBackground(new Color(255,255,255));
 //        volcanvas = new Volcanvas();
 //        volcanvas.repaint();
-
 //        add(volcanvas);
 //        volcanvas.setBounds(0,0,160,160);
 
 
-//        thread_vol = new Thread(this);
-//        thread_vol.start();
+        thread_vol = new Thread(this);
+        thread_vol.start();
 
 //        this.addMouseListener(new MouseAdapter() {
 //            @Override
@@ -40,28 +43,171 @@ public class Vol extends Canvas {
 //                System.out.println(now_vol);
 //            }
 //        });
+        repaint();
         this.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                System.out.print("now_vol!!!");
+            @Override
+            public void mousePressed(MouseEvent e){
+                isPressed = true;
+                System.out.println("isPressed: "+isPressed);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                isPressed = false;
+                now_at = e.getX();
+                now_vol = now_at / getSize().getWidth();
+
+                try {
+                    jplayer.setMediaPlayerVol(now_vol);
+                } catch (Exception exce){
+                    exce.printStackTrace();
+                    System.out.println("bugbug!!!!");
+                }
+                repaint();
+            }
+        });
+
+        this.addMouseMotionListener(new MouseMotionListener(){
+            @Override
+            public void mouseDragged(MouseEvent e){
+                if (isPressed){
+                    now_at = e.getX();
+                    pre_at = now_at;
+                    now_vol = now_at / getSize().getWidth();
+
+                    try {
+                        jplayer.setMediaPlayerVol(now_vol);
+                    } catch (Exception exce){
+                        exce.printStackTrace();
+                        System.out.println("bugbug!!!!");
+                    }
+                    repaint();
+                }
+            }
+            @Override
+            public void mouseMoved(MouseEvent e){
+                if (isPressed){
+                    now_at = e.getX();
+                    pre_at = now_at;
+                    now_vol = now_at / getSize().getWidth();
+
+                    try {
+                        jplayer.setMediaPlayerVol(now_vol);
+                    } catch (Exception exce){
+                        exce.printStackTrace();
+                        System.out.println("bugbug!!!!");
+                    }
+                    repaint();
+                }
+            }
+        });
+
+        jplayer.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+//                isDown = e.getWheelRotation()
+//                -1 mean UP
+//                 1 mean DOWN
+                System.out.println(e.getWheelRotation());
+//                now_vol-=e.getWheelRotation()*2 / 100.0;
+
+                now_at -= e.getWheelRotation() * 50;
+                now_vol = now_at / getSize().getWidth();
+                repaint();
+
+                System.out.print("!!WHEEL!!    ");
+                System.out.println(e.getWheelRotation());
+
+//                shouuldGoAnimate = true;
+                if (now_vol >= 1.0){
+                    now_vol = 1.0;
+                } else if (now_vol <= 0){
+                    now_vol = 0;
+                }
+                try {
+                    jplayer.setMediaPlayerVol(now_vol);
+                } catch (Exception exce){
+                    exce.printStackTrace();
+                    System.out.println("bugbug!!!!");
+                }
+
             }
         });
     }
 
+    public int now_at=-1;
+    public int pre_at;
+    @Override
     public void paint(Graphics g){
-//        g.clearRect(0, 0, total, height);
-        g.setColor(new Color(222,222,222));
-        g.fillRect(0,0,80,160);
+        if (now_at == -1){
+            now_at = 160;
+        }
+
+        if (pre_at != now_at){
+            System.out.println("now_at != pre_at");
+            try {
+
+                int i = 0;
+                int cha = now_at - pre_at;
+//                g.setColor(new Color(222,222,222));
+                System.out.println("cha!!: "+cha);
+                int temp = (cha>=0)?(1):(-1);
+
+
+                int rgb;
+
+
+                for (i=0;(cha>=0)?(i<=cha):(i>=cha);i+=temp){
+                    rgb = (int)(((pre_at+i+0.0) / width) * -40);
+                    g.setColor(new Color(222+rgb,222+rgb,222+rgb));
+                    g.clearRect(0, 0, 420, 160);
+                    System.out.println(pre_at+i);
+                    g.fillRect(0, 0, pre_at+i, 160);
+
+                    g.setColor(new Color(0,0,0));
+                    g.drawString(Double.toString((int)(((pre_at+i+0.0) / width)*100)), 10, 35);
+
+                    Thread.sleep(1);
+                }
+
+//                double delta = cha / 100.0;
+//                System.out.println(delta);
+//                for (i=0;i<=100;i++){
+//                    System.out.println(pre_at);
+//                    g.clearRect(0, 0, 420, 160);
+//                    g.fillRect(0, 0, pre_at, 160);
+//                    pre_at = (int)((double)pre_at+delta);
+//                    Thread.sleep(1);
+//                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            pre_at = now_at;
+            g.fillRect(0, 0, now_at, 160);
+            repaint();
+        }
+//        g.setColor(new Color(222,222,222));
+        int rgb = (int)(now_vol * -40);
+        g.setColor(new Color(222+rgb,222+rgb,222+rgb));
+//        System.out.println("firfir: "+now_at);
+//        g.fillRect(0,0,g., 160);
+        g.fillRect(0, 0, now_at, 160);
+//        System.out.println(g.getFont());
+        g.setColor(new Color(0,0,0));
+        g.drawString(Double.toString((int)(now_vol*100)), 10, 35);
+
+//        g.drawString(Double.toString(now_vol*100), 0, 0);
     }
 
-//    @Override
-//    public void run(){
-//        while (true){
-//            System.out.println("Hello, Vol!");
-//            try {
-//                Thread.sleep(300);
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    @Override
+    public void run(){
+        while (true){
+//            repaint();
+            pre_at = now_at;
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 }
