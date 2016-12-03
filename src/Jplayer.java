@@ -15,57 +15,7 @@ import java.io.*;
 import java.net.*;
 import java.util.List;
 
-public class Jplayer extends JFrame implements DropTargetListener {
-    @Override
-    public void dropActionChanged(DropTargetDragEvent dtde) {
-        System.out.println("dropActionChanged");
-    }
-    @Override
-    public void dragEnter(DropTargetDragEvent dtde) {
-        System.out.println("dragEnter");
-    }
-    @Override
-    public void dragExit(DropTargetEvent dte) {
-        System.out.println("dragExit");
-    }
-    @Override
-    public void dragOver(DropTargetDragEvent dtde) {
-//        System.out.println("dragOver");
-    }
-    @Override
-    public void drop(DropTargetDropEvent dtde) {
-        System.out.println("drop");
-        try {
-//            Transferable tr = dtde.getTransferable();
-
-            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-
-                List list = (List) (
-                        dtde.getTransferable()
-                        .getTransferData(DataFlavor.javaFileListFlavor)
-                );
-                Iterator iterator = list.iterator();
-                while (iterator.hasNext()) {
-                    File f = (File) iterator.next();
-                    System.out.println("拖入的文件是："+f.getAbsolutePath());
-                }
-                dtde.dropComplete(true);
-                //this.updateUI();
-            } else {
-                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                Object drop2here = dtde.getTransferable().getTransferData(DataFlavor.stringFlavor);
-
-                livelist.addElem(drop2here.toString());
-
-                System.out.println(dtde.getTransferable().getTransferData(DataFlavor.stringFlavor));
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
-        }
-    }
+public class Jplayer extends JFrame {
 
 
 
@@ -73,6 +23,7 @@ public class Jplayer extends JFrame implements DropTargetListener {
     private ImgPanel contentPane;
     public Livelist livelist;
     public Vol volBar;
+    public Droparea droparea;
 
     // 顶部条
     private JPanel theHead;
@@ -97,7 +48,6 @@ public class Jplayer extends JFrame implements DropTargetListener {
 
     public static void main(String[] args){
         Jplayer myP =  new Jplayer();
-        new DropTarget(myP, DnDConstants.ACTION_COPY_OR_MOVE, myP);
     }
 
     private void JP_View_init(){
@@ -118,10 +68,15 @@ public class Jplayer extends JFrame implements DropTargetListener {
 
         contentPane = new ImgPanel();
 
+
+
         Container jp = getContentPane();
         jp.add(contentPane);
+
         contentPane.setLayout(null);
         contentPane.setBackground(new Color(244, 244, 244));
+
+
 
         theHead = new JPanel();
         theHead.setBounds(0, 0, 855, 50);
@@ -227,6 +182,10 @@ public class Jplayer extends JFrame implements DropTargetListener {
         volBar = new Vol(this);
         volBar.setBounds(435, 355, 420, 160);
         contentPane.add(volBar);
+        droparea = new Droparea(this);
+        droparea.setBounds(0,0,855,435);
+
+        contentPane.add(droparea);
 
     }
 
