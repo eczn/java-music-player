@@ -22,7 +22,7 @@ public class ImgPanel extends JPanel {
 
     public ImgPanel() {
         try {
-            URL url = ImgPanel.class.getResource("images/origin-dev.png");
+            URL url = ImgPanel.class.getResource("images/main-theme.png");
             default_image = ImageIO.read(url);
             image=default_image;
         } catch (IOException ex) {

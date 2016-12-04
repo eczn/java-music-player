@@ -1,4 +1,5 @@
 import javafx.embed.swing.JFXPanel;
+import javafx.util.Duration;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -263,14 +264,30 @@ public class Livelist extends JFrame {
         jP.thePlay(10);
 
     }
+    public void toRandom(){
+        now_play_in = (int)(Math.random() * model.getSize());
+        if (now_play_in < 0){
+            now_play_in = model.getSize()-1;
+            toRandom();
+        } else if (now_play_in > model.getSize()-1){
+            toRandom();
+        }
+        jP.path = model.getElementAt(now_play_in);
+        jP.thePlay(10);
 
-    public void musicEnd(){
-        toNext();
     }
 
-    public static void main(String[] args){
-//        listLoader();
-//        new Livelist();
+    public void musicEnd(){
+        if (jP.jStatus.playmode == jP.jStatus.SINGLE_LOOP){
+            jP.mediaPlayer.seek(new Duration(0.0));
+            jP.mediaPlayer.stop();
+            jP.mediaPlayer.play();
+
+        } else if (jP.jStatus.playmode == jP.jStatus.LIST_LOOP){
+            toNext();
+        } else if (jP.jStatus.playmode == jP.jStatus.RANDOM_LOOP){
+            toRandom();
+        }
     }
 
 }

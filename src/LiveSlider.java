@@ -26,6 +26,11 @@ public class LiveSlider extends JPanel implements Runnable {
 //        now_playing
 
         while(true){
+            System.out.println("total: "+total);
+            System.out.println("currentAt: "+currentAt);
+            System.out.println("percentage: "+percentage);
+            System.out.println();
+
             try {
                 Thread.sleep(500);
                 if (now_playing != null){
@@ -65,6 +70,7 @@ public class LiveSlider extends JPanel implements Runnable {
         percentage = currentAt / total;
         repaint();
     }
+
     public void setTotal(double t){
         total = t;
     }

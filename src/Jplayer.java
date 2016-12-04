@@ -34,6 +34,7 @@ public class Jplayer extends JFrame {
     private Btns nextBtn;
     private Btns preBtn;
     private Btns listBtn;
+    private Btns modeBtn;
 
     // 播放状态
     public JStatus jStatus;
@@ -63,9 +64,10 @@ public class Jplayer extends JFrame {
         // 程序图标
         setIconImage(
                 Toolkit.getDefaultToolkit().getImage(
-                        Jplayer.class.getResource("images/main-theme.png")
+                        Jplayer.class.getResource("images/origin-dev.png")
                 )
         );
+
         setResizable(false);
         // 设置背景颜色
         setBackground(Color.WHITE);
@@ -139,9 +141,7 @@ public class Jplayer extends JFrame {
                 } else {
                     thePlay(0); // playByPath
                 }
-
             }
-
         });
         playBtn.setVisible(true);
         playBtn.repaint();
@@ -158,7 +158,12 @@ public class Jplayer extends JFrame {
         nextBtn.setBounds(735, 130, 60, 60);
         nextBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                livelist.toNext();
+                if (jStatus.playmode != jStatus.RANDOM_LOOP){
+                    livelist.toNext();
+                } else {
+                    livelist.musicEnd();
+                }
+
             }
         });
         contentPane.add(nextBtn);
@@ -196,6 +201,29 @@ public class Jplayer extends JFrame {
             public void mouseClicked(MouseEvent e) {
 //                jStatus.isListOpen = !jStatus.isListOpen;
                 livelist.setVisible(true);
+            }
+        });
+
+
+
+
+        modeBtn = new Btns(jStatus.getResources(jStatus.SINGLE_LOOP), "playmode");
+        modeBtn.setBorder(null);
+        modeBtn.setBounds(685, 280, 60, 60);
+        modeBtn.setBackground(null);
+        modeBtn.setOpaque(false);
+
+        modeBtn.setVisible(true);
+        modeBtn.repaint();
+        contentPane.add(modeBtn);
+        modeBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                URL[] res;
+                res = jStatus.modeToggle();
+//                System.out.println("  mode: "+jStatus.playmode);
+                modeBtn.imgSrc = res;
+                modeBtn.repaint();
             }
         });
 
@@ -237,7 +265,6 @@ public class Jplayer extends JFrame {
         playBtn.imgSrc[2] = Jplayer.class.getResource("images/pause_pressed.png");
 
         try {
-
             if (status == 0) {
                 if (jStatus.isPlay) {
                     mediaPlayer.pause();
@@ -307,9 +334,32 @@ public class Jplayer extends JFrame {
             }
         });
 
+        mediaPlayer.setOnStopped(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("onStopped");
+//                ls.setCurrent(0.0);
+//                ls.setTotal(0);
+//                ls.setPlayer(mediaPlayer);
+//                mediaPlayer.seek();
+                ls.currentAt = 0.0;
+                ls.percentage = 0.0;
+//                ls.total;
+                ls.now_status = jStatus;
+            }
+        });
+
+        mediaPlayer.setOnError(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("media error");
+            }
+        });
+
         mediaPlayer.setOnEndOfMedia(new Runnable(){
             public void run(){
                 System.out.println("END!");
+
                 livelist.musicEnd();
             }
         });
