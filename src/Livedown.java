@@ -118,7 +118,7 @@ class Download implements Runnable {
             FileOutputStream fs = new FileOutputStream(saveFile);
 
             // buf 2KB
-            byte[] buffer = new byte[2048];
+            byte[] buffer = new byte[4096];
 
             Thread.sleep(2000);
             while ((byteread = inStream.read(buffer)) != -1) {
@@ -131,7 +131,7 @@ class Download implements Runnable {
                 myBar.small_lenth = (int)(rate * myBar.total);
                 myBar.repaint();
                 fs.write(buffer, 0, byteread);
-                Thread.sleep(1);
+                Thread.sleep(8);
             }
 
             fs.close();
@@ -191,6 +191,7 @@ class ProcessBar extends Canvas {
 
     // 绘图
     public void paint(Graphics g){
+        System.out.println("small_lenth: "+small_lenth);
         g.clearRect(0, 0, total, height);
         if (bottom_color != null){
             g.setColor(bottom_color);

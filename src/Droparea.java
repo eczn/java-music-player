@@ -25,6 +25,7 @@ public class Droparea extends Container implements DropTargetListener {
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
         System.out.println("dragEnter");
+//        jp.theHead.
     }
     @Override
     public void dragExit(DropTargetEvent dte) {

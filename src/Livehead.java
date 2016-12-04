@@ -14,6 +14,7 @@ public class Livehead extends JPanel {
     private Point tmp;
     private Point loc;
     private Livehead father = this;
+    public JLabel title;
 
     public Livehead(){
         super();
@@ -24,6 +25,15 @@ public class Livehead extends JPanel {
         drag_init();
         header_btns_init();
 
+        title = new JLabel("welcome, Click the list and choose music");
+        title.setForeground(Color.WHITE);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setVerticalAlignment(SwingConstants.CENTER);
+        title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
+        title.setBounds(0, 0, 855, 60);
+        title.setVisible(true);
+        title.repaint();
+        this.add(title);
 
     }
 

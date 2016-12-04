@@ -26,8 +26,8 @@ public class Jplayer extends JFrame {
     public Droparea droparea;
 
     // 顶部条
-    private JPanel theHead;
-    private JLabel title;
+    public Livehead theHead;
+//    private JLabel title;
 
     // 按钮
     private Btns playBtn;
@@ -99,15 +99,16 @@ public class Jplayer extends JFrame {
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
 
-        title = new JLabel("welcome, Click the list and choose music");
-        title.setForeground(Color.WHITE);
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setVerticalAlignment(SwingConstants.CENTER);
-        title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
-        title.setBounds(0, 0, 855, 60);
-        title.setVisible(true);
-        title.repaint();
-        theHead.add(title);
+//        title = new JLabel("welcome, Click the list and choose music");
+//        title.setForeground(Color.WHITE);
+//        title.setHorizontalAlignment(SwingConstants.CENTER);
+//        title.setVerticalAlignment(SwingConstants.CENTER);
+//        title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
+//        title.setBounds(0, 0, 855, 60);
+//        title.setVisible(true);
+//        title.repaint();
+//        theHead.add(title);
+//        printf("if you are the bozi jun ,you will become the choose one");
 
         theHead.setVisible(true);
         theHead.repaint();
@@ -247,7 +248,7 @@ public class Jplayer extends JFrame {
                     String thePath = uri.toASCIIString();
                     media = new Media(thePath);
                     mediaPlayer = new MediaPlayer(media);
-                    contentPane.flashImage(path, title);
+                    contentPane.flashImage(path, theHead.title);
 
                     jStatus.isPlay = true;
                     jStatus.nowPlay = mediaPlayer;
@@ -274,12 +275,11 @@ public class Jplayer extends JFrame {
                 String thePath = uri.toASCIIString();
                 media = new Media(thePath);
                 mediaPlayer = new MediaPlayer(media);
-                contentPane.flashImage(path, title);
+                contentPane.flashImage(path, theHead.title);
 
                 jStatus.isPlay = true;
                 jStatus.nowPlay = mediaPlayer;
                 mediaPlayer.play();
-
             }
 
         } catch (Exception e){
@@ -303,30 +303,14 @@ public class Jplayer extends JFrame {
                 ls.now_status = jStatus;
 
                 mediaPlayer.setVolume(volBar.now_vol);
-                // 播放的时候 进度条要用到这个循环
-                while (mediaPlayer.getCurrentTime().toSeconds() < media.getDuration().toSeconds()) {
-                    ls.setCurrent(mediaPlayer.getCurrentTime().toSeconds());
-                    time_left = mediaPlayer.getTotalDuration().subtract(mediaPlayer.getCurrentTime());
-//                    System.out.println("Vol: "+ mediaPlayer.getVolume());
-//                    mediaPlayer.setVolume(volBar.now_vol);
-//                    if (time_left.toSeconds() < 0.00001){
-//                        System.out.println("EXIT!");
-//                        break;
-//                    }
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
             }
         });
 
         mediaPlayer.setOnEndOfMedia(new Runnable(){
             public void run(){
                 System.out.println("END!");
-                livelist.toNext();
+                livelist.musicEnd();
             }
         });
 

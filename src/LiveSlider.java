@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LiveSlider extends JPanel {
+public class LiveSlider extends JPanel implements Runnable {
     private int height;
     private int width;
     public double currentAt;
@@ -18,6 +18,43 @@ public class LiveSlider extends JPanel {
     private MediaPlayer now_playing;
     public JStatus now_status;
     public boolean X_MAIN;
+    public Thread sliderUI;
+
+
+    @Override
+    public void run(){
+//        now_playing
+
+        while(true){
+            try {
+                Thread.sleep(500);
+                if (now_playing != null){
+                    setCurrent(now_playing.getCurrentTime().toSeconds());
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public LiveSlider(){
+        super();
+        init = true;
+        height = 0;
+        width = 0;
+        mouseInit();
+    }
+    public LiveSlider(int W, int H, boolean X){
+        super();
+        init = true;
+        height = H;
+        width = W;
+        X_MAIN = X;
+        mouseInit();
+
+        sliderUI = new Thread(this);
+        sliderUI.start();
+    }
 
     public void setPlayer(MediaPlayer P){
         now_playing = P;
@@ -72,7 +109,6 @@ public class LiveSlider extends JPanel {
             init = false;
         }
 
-
     }
 
     public boolean onEvent;
@@ -90,21 +126,5 @@ public class LiveSlider extends JPanel {
                 repaint();
             }
         });
-    }
-
-    public LiveSlider(){
-        super();
-        init = true;
-        height = 0;
-        width = 0;
-        mouseInit();
-    }
-    public LiveSlider(int W, int H, boolean X){
-        super();
-        init = true;
-        height = H;
-        width = W;
-        X_MAIN = X;
-        mouseInit();
     }
 }

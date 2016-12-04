@@ -54,8 +54,8 @@ public class Vol extends Canvas implements Runnable {
             @Override
             public void mouseReleased(MouseEvent e) {
                 isPressed = false;
-                now_at = e.getX();
-                now_vol = now_at / getSize().getWidth();
+                now_at = width-e.getX();
+                now_vol = (now_at / getSize().getWidth());
 
                 try {
                     jplayer.setMediaPlayerVol(now_vol);
@@ -71,9 +71,9 @@ public class Vol extends Canvas implements Runnable {
             @Override
             public void mouseDragged(MouseEvent e){
                 if (isPressed){
-                    now_at = e.getX();
+                    now_at = width-e.getX();
                     pre_at = now_at;
-                    now_vol = now_at / getSize().getWidth();
+                    now_vol = (now_at / getSize().getWidth());
 
                     try {
                         jplayer.setMediaPlayerVol(now_vol);
@@ -87,9 +87,9 @@ public class Vol extends Canvas implements Runnable {
             @Override
             public void mouseMoved(MouseEvent e){
                 if (isPressed){
-                    now_at = e.getX();
+                    now_at = width-e.getX();
                     pre_at = now_at;
-                    now_vol = now_at / getSize().getWidth();
+                    now_vol = (now_at / getSize().getWidth());
 
                     try {
                         jplayer.setMediaPlayerVol(now_vol);
@@ -105,20 +105,20 @@ public class Vol extends Canvas implements Runnable {
         jplayer.addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-//                isDown = e.getWheelRotation()
-//                -1 mean UP
-//                 1 mean DOWN
-                System.out.println(e.getWheelRotation());
-//                now_vol-=e.getWheelRotation()*2 / 100.0;
+//                System.out.println(e.getWheelRotation());
 
-                now_at -= e.getWheelRotation() * 50;
+                now_at -= e.getWheelRotation() * 35;
                 now_vol = now_at / getSize().getWidth();
+                if (now_at<=0){
+                    now_at = 0;
+                } else if (now_at >= width){
+                    now_at = width;
+                }
                 repaint();
 
                 System.out.print("!!WHEEL!!    ");
                 System.out.println(e.getWheelRotation());
 
-//                shouuldGoAnimate = true;
                 if (now_vol >= 1.0){
                     now_vol = 1.0;
                 } else if (now_vol <= 0){
@@ -144,53 +144,61 @@ public class Vol extends Canvas implements Runnable {
             now_at = 160;
         }
 
+
         if (pre_at != now_at){
             System.out.println("now_at != pre_at");
             try {
-
                 int i = 0;
                 int cha = now_at - pre_at;
 //                g.setColor(new Color(222,222,222));
                 System.out.println("cha!!: "+cha);
                 int temp = (cha>=0)?(1):(-1);
 
-
                 for (i=0;(cha>=0)?(i<=cha):(i>=cha);i+=temp){
-                    rgb = (int)(((pre_at+i+0.0) / width) * -40);
-                    g.setColor(new Color(222+rgb,222+rgb,222+rgb));
-                    g.clearRect(0, 0, 420, height);
-                    System.out.println(pre_at+i);
-                    g.fillRect(0, 0, pre_at+i, height);
-
+//                    rgb = (int)(now_at / getSize().getWidth());
+                    rgb = (int)(((pre_at+i+0.0) / width) * 40);
+                    g.setColor(new Color(250-rgb/4,250-(int)(rgb/1.5),250-(int)(rgb/1.5)));
+//                    g.clearRect(0, 0, 420, height);
+                    g.fillRect(0, 0, 420, height);
+//                    System.out.println(pre_at+i);
+//                    g.fillRect(0, 0, pre_at+i, height);
+                    g.clearRect(0, 0, width-(pre_at+i), height);
                     g.setColor(new Color(0,0,0));
-                    g.drawString( Integer.toString((int)(now_vol*100)), 10, 35);
+
+                    double temp_now_at = (pre_at+i)/(double)width;
+                    setFont(new Font("Arial", Font.PLAIN, (int)(temp_now_at*12)+12));
+                    g.drawString( Integer.toString((int)(((double)(pre_at+i)/width)*100)) + "%",
+                            width-(pre_at+i)-(int)(20*(1-temp_now_at)),
+                            30);
 
                     Thread.sleep(1);
                 }
-
-//                double delta = cha / 100.0;
-//                System.out.println(delta);
-//                for (i=0;i<=100;i++){
-//                    System.out.println(pre_at);
-//                    g.clearRect(0, 0, 420, 160);
-//                    g.fillRect(0, 0, pre_at, 160);
-//                    pre_at = (int)((double)pre_at+delta);
-//                    Thread.sleep(1);
-//                }
             } catch (Exception e){
                 e.printStackTrace();
             }
             pre_at = now_at;
-            g.fillRect(0, 0, now_at, height);
-            repaint();
+            g.fillRect(0, 0, 420, height);
+            g.clearRect(0, 0, width-now_at, height);
+
+//            repaint();
+//            return;
         }
 
-        rgb = (int)(now_vol * -40);
-        g.setColor(new Color(222+rgb,222+rgb,222+rgb));
+        rgb = (int)(now_vol * 40);
 
-        g.fillRect(0, 0, now_at, height);
+
+        g.setColor(new Color(250-rgb/4,250-(int)(rgb/1.5),250-(int)(rgb/1.5)));
+
+//        g.fillRect(0, 0, now_at, height);
+        g.fillRect(0, 0, 420, height);
+        g.clearRect(0, 0, width-now_at, height);
+
         g.setColor(new Color(0,0,0));
-        g.drawString( Integer.toString((int)(now_vol*100)), 10, 35);
+
+//        setFont(new Font("Arial", Font.PLAIN, (int)(now_vol*16)+16));
+        g.drawString(Integer.toString((int)(((double)(now_at)/width)*100)) + "%",
+                width-(now_at)-(int)(20*(1-now_vol)),
+                30);
     }
 
     @Override

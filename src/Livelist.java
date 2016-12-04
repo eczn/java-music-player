@@ -146,7 +146,6 @@ public class Livelist extends JFrame {
 
 
 
-
         listAdd = new JButton("+ add");
         listAdd.setBounds(0, 390, 80, 30);
         listAdd.setHorizontalAlignment(SwingConstants.CENTER);
@@ -167,6 +166,7 @@ public class Livelist extends JFrame {
                     String willBePath = file.getAbsolutePath().replace("\\", "/");
                     model.addElement(willBePath);
                 }
+                listSave();
                 list.repaint();
 
             }
@@ -192,9 +192,6 @@ public class Livelist extends JFrame {
         list.add(listSave);
         list.setVisible(true);
         list.repaint();
-
-
-
 
         Livelist Livelist_temp = this;
 
@@ -265,6 +262,10 @@ public class Livelist extends JFrame {
         jP.path = model.getElementAt(now_play_in);
         jP.thePlay(10);
 
+    }
+
+    public void musicEnd(){
+        toNext();
     }
 
     public static void main(String[] args){
