@@ -6,10 +6,11 @@ import java.awt.*;
 
 public class AboutMe extends JFrame {
     public AboutMe(){
-        setVisible(true);
+//        setVisible(true);
         setBounds(0,0,550,230);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Avatar myAvatar = new Avatar();
+
         myAvatar.setBounds(0,0,550,230);
 
         System.out.println(getSize());
@@ -26,7 +27,7 @@ public class AboutMe extends JFrame {
 
 class Avatar extends Canvas {
     public Avatar(){
-
+        super();
     }
 
     @Override

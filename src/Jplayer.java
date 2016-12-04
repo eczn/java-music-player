@@ -183,6 +183,30 @@ public class Jplayer extends JFrame {
         });
         contentPane.add(preBtn);
 
+
+
+        Btns aboutBtn;
+        URL[] aboutTemp = {
+                Jplayer.class.getResource("images/about.png"),
+                Jplayer.class.getResource("images/about.png"),
+                Jplayer.class.getResource("images/about.png")
+        };
+        aboutBtn = new Btns(aboutTemp,"pre");
+        aboutBtn.setBorder(null);
+        aboutBtn.setBounds(495, 280, 60, 60);
+        aboutBtn.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                JFrame temp = new AboutMe();
+                temp.setVisible(true);
+//                temp.setDefaultCloseOperation();
+                temp.setUndecorated(true);
+//                this.setDefaultLookAndFeelDecorated(true);
+            }
+        });
+        contentPane.add(aboutBtn);
+
+
+
         URL[] listTemp = {
                 Jplayer.class.getResource("images/list_icon.png"),
                 Jplayer.class.getResource("images/list-pressed.png"),
