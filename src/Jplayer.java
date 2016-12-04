@@ -77,7 +77,7 @@ public class Jplayer extends JFrame {
         this.setDefaultLookAndFeelDecorated(true);
 
         AWTUtilities.setWindowShape(this,
-                new RoundRectangle2D.Double(2.0D, 2.0D, this.getWidth(),
+                new RoundRectangle2D.Double(0D, 0D, this.getWidth(),
                         this.getHeight(), 24.0D, 24.0D));
 
         contentPane = new ImgPanel();
@@ -94,8 +94,8 @@ public class Jplayer extends JFrame {
 
 
 
-        theHead = new JPanel();
-        theHead.setBounds(0, 0, 855, 50);
+        theHead = new Livehead(this);
+        theHead.setBounds(0, 0, 855, 60);
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
 
@@ -104,7 +104,7 @@ public class Jplayer extends JFrame {
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setVerticalAlignment(SwingConstants.CENTER);
         title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
-        title.setBounds(0, 0, 855, 50);
+        title.setBounds(0, 0, 855, 60);
         title.setVisible(true);
         title.repaint();
         theHead.add(title);
@@ -112,58 +112,7 @@ public class Jplayer extends JFrame {
         theHead.setVisible(true);
         theHead.repaint();
 
-
-        URL[] closeIcons = {
-                Jplayer.class.getResource("images/close_icon.png"),
-                Jplayer.class.getResource("images/close-pressed.png"),
-                Jplayer.class.getResource("images/close-pressed.png")
-        };
-        Btns toClose = new Btns(closeIcons, "close");
-        toClose.setBounds(805, 0, 50, 50);
-        toClose.setBorder(null);
-        toClose.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                System.exit(0);
-            }
-        });
-        theHead.add(toClose);
-
         contentPane.add(theHead);
-
-
-
-        Jplayer jptemp = this;
-        theHead.addMouseListener(new MouseAdapter() {
-            public void mouseReleased(MouseEvent e) {
-                isDragged = false;
-                jptemp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-            public void mousePressed(MouseEvent e) {
-                tmp = new Point(e.getX(), e.getY());
-                isDragged = true;
-                jptemp.setCursor(new Cursor(Cursor.MOVE_CURSOR));
-            }
-        });
-        theHead.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                if(isDragged) {
-                    loc = new Point(jptemp.getLocation().x + e.getX() - tmp.x,
-                            jptemp.getLocation().y + e.getY() - tmp.y);
-
-                    jptemp.setLocation(loc);
-                }
-            }
-        });
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -175,7 +124,6 @@ public class Jplayer extends JFrame {
         };
 
         playBtn = new Btns(playIcons,"play");
-        playBtn.setBorder(null);
         playBtn.setSize(60, 60);
         playBtn.setVisible(true);
         playBtn.setBounds(615, 130, 60, 60);
@@ -236,7 +184,7 @@ public class Jplayer extends JFrame {
         };
         listBtn = new Btns(listTemp,"list");
         listBtn.setBorder(null);
-        listBtn.setBounds(745, 320, 60, 30);
+        listBtn.setBounds(745, 310, 60, 40);
         listBtn.setBackground(null);
         listBtn.setOpaque(false);
 
@@ -245,8 +193,8 @@ public class Jplayer extends JFrame {
         contentPane.add(listBtn);
         listBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                jStatus.isListOpen = !jStatus.isListOpen;
-                livelist.setVisible(jStatus.isListOpen);
+//                jStatus.isListOpen = !jStatus.isListOpen;
+                livelist.setVisible(true);
             }
         });
 

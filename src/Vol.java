@@ -21,6 +21,7 @@ public class Vol extends Canvas implements Runnable {
         jplayer = JPLAYER;
 //        mp = mediaplayer;
         now_vol = 1.0;
+        height = 40;
         System.out.println("!@#$!: "+getSize().getWidth());
 //        now_at = (int)(this.getSize().getWidth());
         now_at = 420;
@@ -32,8 +33,8 @@ public class Vol extends Canvas implements Runnable {
 //        volcanvas.setBounds(0,0,160,160);
 
 
-        thread_vol = new Thread(this);
-        thread_vol.start();
+//        thread_vol = new Thread(this);
+//        thread_vol.start();
 
 //        this.addMouseListener(new MouseAdapter() {
 //            @Override
@@ -94,7 +95,7 @@ public class Vol extends Canvas implements Runnable {
                         jplayer.setMediaPlayerVol(now_vol);
                     } catch (Exception exce){
                         exce.printStackTrace();
-                        System.out.println("bugbug!!!!");
+                        System.out.println("MediaPlayerVolSettingBUG");
                     }
                     repaint();
                 }
@@ -138,6 +139,7 @@ public class Vol extends Canvas implements Runnable {
     public int pre_at;
     @Override
     public void paint(Graphics g){
+        int rgb;
         if (now_at == -1){
             now_at = 160;
         }
@@ -153,18 +155,15 @@ public class Vol extends Canvas implements Runnable {
                 int temp = (cha>=0)?(1):(-1);
 
 
-                int rgb;
-
-
                 for (i=0;(cha>=0)?(i<=cha):(i>=cha);i+=temp){
                     rgb = (int)(((pre_at+i+0.0) / width) * -40);
                     g.setColor(new Color(222+rgb,222+rgb,222+rgb));
-                    g.clearRect(0, 0, 420, 160);
+                    g.clearRect(0, 0, 420, height);
                     System.out.println(pre_at+i);
-                    g.fillRect(0, 0, pre_at+i, 160);
+                    g.fillRect(0, 0, pre_at+i, height);
 
                     g.setColor(new Color(0,0,0));
-                    g.drawString(Double.toString((int)(((pre_at+i+0.0) / width)*100)), 10, 35);
+                    g.drawString( Integer.toString((int)(now_vol*100)), 10, 35);
 
                     Thread.sleep(1);
                 }
@@ -182,27 +181,23 @@ public class Vol extends Canvas implements Runnable {
                 e.printStackTrace();
             }
             pre_at = now_at;
-            g.fillRect(0, 0, now_at, 160);
+            g.fillRect(0, 0, now_at, height);
             repaint();
         }
-//        g.setColor(new Color(222,222,222));
-        int rgb = (int)(now_vol * -40);
-        g.setColor(new Color(222+rgb,222+rgb,222+rgb));
-//        System.out.println("firfir: "+now_at);
-//        g.fillRect(0,0,g., 160);
-        g.fillRect(0, 0, now_at, 160);
-//        System.out.println(g.getFont());
-        g.setColor(new Color(0,0,0));
-        g.drawString(Double.toString((int)(now_vol*100)), 10, 35);
 
-//        g.drawString(Double.toString(now_vol*100), 0, 0);
+        rgb = (int)(now_vol * -40);
+        g.setColor(new Color(222+rgb,222+rgb,222+rgb));
+
+        g.fillRect(0, 0, now_at, height);
+        g.setColor(new Color(0,0,0));
+        g.drawString( Integer.toString((int)(now_vol*100)), 10, 35);
     }
 
     @Override
     public void run(){
         while (true){
 //            repaint();
-            pre_at = now_at;
+//            pre_at = now_at;
             try {
                 Thread.sleep(1000);
             } catch (Exception e){

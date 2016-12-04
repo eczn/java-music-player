@@ -20,6 +20,7 @@ public class Btns extends JButton {
     public Btns() { // construtor
         btnName = "btn";
         justText = false;
+        this.setBorder(null);
     }
 
     public Btns(String text){
@@ -33,7 +34,8 @@ public class Btns extends JButton {
         btnName = text;
         imgSrc = ImageSrc_output;
         justText = false;
-
+        this.setBorder(null);
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         firInit = true;
 
         repaint();
@@ -46,10 +48,7 @@ public class Btns extends JButton {
         if (justText){
             g.drawString(btnName, 0,0);
         } else {
-
-
             ButtonModel model = getModel();
-//            g.clearRect(0,0,60,60);
 
             if (model.isPressed()) {
                 Color c = new Color(0,0,0);
@@ -58,14 +57,12 @@ public class Btns extends JButton {
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[1]);
 
-//                g.drawImage(image, 0, 0, new Color(255,255,255), null);
                 g.drawImage(image, 0, 0, null);
 
             } else {
                 Color c = new Color(120,120,120);
                 g.setColor(c);
 
-//                g.clearRect(0,0,60,60);
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[0]);
                 g.drawImage(image, 0, 0, new Color(255,255,255), null);
@@ -77,7 +74,6 @@ public class Btns extends JButton {
                 g.setColor(c);
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[2]);
-//                g.drawImage(image, 0, 0, new Color(255,255,255), null);
                 g.drawImage(image, 0, 0, null);
 
             }
@@ -86,6 +82,7 @@ public class Btns extends JButton {
         if (firInit){
             repaint();
             g.clearRect(0,0,60,60);
+            repaint();
             firInit = false;
         }
     }
