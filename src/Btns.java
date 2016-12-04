@@ -43,10 +43,6 @@ public class Btns extends JButton {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-//        g.setColor(new Color(255,255,255,0.0f));
-//        g.clearRect(0,0,60,60);
-//        g.clearRect(0,0,60,60);
-
         if (justText){
             g.drawString(btnName, 0,0);
         } else {
@@ -92,18 +88,5 @@ public class Btns extends JButton {
             g.clearRect(0,0,60,60);
             firInit = false;
         }
-
-//        BufferedImage bir =  new BufferedImage(60, 60, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D birg2d = (Graphics2D) bir.getGraphics();
-//        birg2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_ATOP, 1.0f));
-//        g.drawImage(bir, 0, 0, null);
-
-//        int i,j;
-//        g.setColor(new Color(255,255,255,0));
-//        System.out.println(g.getColor());
-//        for (i=0;i<60;i++){
-////            System.out.println(i);
-//            g.drawLine(0,i,60,i);
-//        }
     }
 }

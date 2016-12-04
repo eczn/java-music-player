@@ -1,5 +1,7 @@
+import com.sun.awt.AWTUtilities;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.swing.*;
@@ -9,6 +11,7 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.net.URI;
 import java.util.*;
 import java.io.*;
@@ -16,9 +19,6 @@ import java.net.*;
 import java.util.List;
 
 public class Jplayer extends JFrame {
-
-
-
     // main container
     private ImgPanel contentPane;
     public Livelist livelist;
@@ -46,6 +46,14 @@ public class Jplayer extends JFrame {
     public MediaPlayer mediaPlayer;
     private Media media;
 
+
+    public Point loc = null;
+    public Point tmp = null;
+    public boolean isDragged = false;
+
+
+
+
     public static void main(String[] args){
         Jplayer myP =  new Jplayer();
     }
@@ -55,7 +63,7 @@ public class Jplayer extends JFrame {
         // 程序图标
         setIconImage(
                 Toolkit.getDefaultToolkit().getImage(
-                        Jplayer.class.getResource("images/clio-emt-speaker.png")
+                        Jplayer.class.getResource("images/main-theme.png")
                 )
         );
         setResizable(false);
@@ -65,6 +73,12 @@ public class Jplayer extends JFrame {
         setBounds(200, 100, 855, 435);
         // 点右上角按钮的时候的默认操作，这里设置为  EXIT_ON_CLOSE 也就是直接退出
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setDefaultLookAndFeelDecorated(true);
+
+        AWTUtilities.setWindowShape(this,
+                new RoundRectangle2D.Double(2.0D, 2.0D, this.getWidth(),
+                        this.getHeight(), 24.0D, 24.0D));
 
         contentPane = new ImgPanel();
 
@@ -75,6 +89,8 @@ public class Jplayer extends JFrame {
 
         contentPane.setLayout(null);
         contentPane.setBackground(new Color(244, 244, 244));
+
+
 
 
 
@@ -95,7 +111,62 @@ public class Jplayer extends JFrame {
 
         theHead.setVisible(true);
         theHead.repaint();
+
+
+        URL[] closeIcons = {
+                Jplayer.class.getResource("images/close_icon.png"),
+                Jplayer.class.getResource("images/close-pressed.png"),
+                Jplayer.class.getResource("images/close-pressed.png")
+        };
+        Btns toClose = new Btns(closeIcons, "close");
+        toClose.setBounds(805, 0, 50, 50);
+        toClose.setBorder(null);
+        toClose.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                System.exit(0);
+            }
+        });
+        theHead.add(toClose);
+
         contentPane.add(theHead);
+
+
+
+        Jplayer jptemp = this;
+        theHead.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                isDragged = false;
+                jptemp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+            public void mousePressed(MouseEvent e) {
+                tmp = new Point(e.getX(), e.getY());
+                isDragged = true;
+                jptemp.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+            }
+        });
+        theHead.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if(isDragged) {
+                    loc = new Point(jptemp.getLocation().x + e.getX() - tmp.x,
+                            jptemp.getLocation().y + e.getY() - tmp.y);
+
+                    jptemp.setLocation(loc);
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         URL[] playIcons = {
             Jplayer.class.getResource("images/play_icon.png"),
@@ -212,11 +283,44 @@ public class Jplayer extends JFrame {
         JFXPanel fxPanel;
         fxPanel = new JFXPanel();
 
-        if (status == 0){
-            if (jStatus.isPlay){
+        playBtn.imgSrc[0] = Jplayer.class.getResource("images/pause_icon.png");
+        playBtn.imgSrc[1] = Jplayer.class.getResource("images/pause_pressed.png");
+        playBtn.imgSrc[2] = Jplayer.class.getResource("images/pause_pressed.png");
+
+        try {
+
+            if (status == 0) {
+                if (jStatus.isPlay) {
+                    mediaPlayer.pause();
+                    jStatus.isPlay = false;
+                } else if (jStatus.nowPlay == null) {
+                    File Song = new File(path);
+                    URI uri = Song.toURI();
+                    String thePath = uri.toASCIIString();
+                    media = new Media(thePath);
+                    mediaPlayer = new MediaPlayer(media);
+                    contentPane.flashImage(path, title);
+
+                    jStatus.isPlay = true;
+                    jStatus.nowPlay = mediaPlayer;
+                    mediaPlayer.play();
+                    jStatus.isPlay = true;
+                } else if (jStatus.nowPlay != null) {
+                    mediaPlayer.play();
+                    jStatus.isPlay = true;
+                }
+            } else if (status == 1) {
                 mediaPlayer.pause();
+                playBtn.imgSrc[0] = Jplayer.class.getResource("images/play_icon.png");
+                playBtn.imgSrc[1] = Jplayer.class.getResource("images/play-pressed.png");
+                playBtn.imgSrc[2] = Jplayer.class.getResource("images/play-pressed.png");
+
                 jStatus.isPlay = false;
-            } else if (jStatus.nowPlay == null){
+            } else if (status == 10) {
+                if (jStatus.nowPlay != null) {
+                    mediaPlayer.stop();
+                }
+
                 File Song = new File(path);
                 URI uri = Song.toURI();
                 String thePath = uri.toASCIIString();
@@ -227,30 +331,17 @@ public class Jplayer extends JFrame {
                 jStatus.isPlay = true;
                 jStatus.nowPlay = mediaPlayer;
                 mediaPlayer.play();
-                jStatus.isPlay = true;
-            } else if (jStatus.nowPlay != null) {
-                mediaPlayer.play();
-                jStatus.isPlay = true;
-            }
-        } else if (status == 1){
-            mediaPlayer.pause();
-            jStatus.isPlay = false;
-        } else if (status == 10){
-            if (jStatus.nowPlay != null){
-                mediaPlayer.stop();
+
             }
 
-            File Song = new File(path);
-            URI uri = Song.toURI();
-            String thePath = uri.toASCIIString();
-            media = new Media(thePath);
-            mediaPlayer = new MediaPlayer(media);
-            contentPane.flashImage(path, title);
-
-            jStatus.isPlay = true;
-            jStatus.nowPlay = mediaPlayer;
-            mediaPlayer.play();
-
+        } catch (Exception e){
+            e.printStackTrace();
+            playBtn.imgSrc[0] = Jplayer.class.getResource("images/play_icon.png");
+            playBtn.imgSrc[1] = Jplayer.class.getResource("images/play-pressed.png");
+            playBtn.imgSrc[2] = Jplayer.class.getResource("images/play-pressed.png");
+            this.repaint();
+            // 出错结束 thePlay()
+            return;
         }
 
         mediaPlayer.setOnPlaying(new Runnable(){
