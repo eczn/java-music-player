@@ -265,7 +265,16 @@ public class Livelist extends JFrame {
 
     }
     public void toRandom(){
-        now_play_in = (int)(Math.random() * model.getSize());
+        int temp = now_play_in;
+        int rand = (int)(Math.random() * model.getSize());
+
+
+        if ( temp == rand ){
+            toRandom();
+        } else {
+            now_play_in = rand;
+        }
+
         if (now_play_in < 0){
             now_play_in = model.getSize()-1;
             toRandom();
@@ -281,7 +290,7 @@ public class Livelist extends JFrame {
         if (jP.jStatus.playmode == jP.jStatus.SINGLE_LOOP){
             jP.mediaPlayer.seek(new Duration(0.0));
             jP.mediaPlayer.stop();
-            jP.mediaPlayer.play();
+
 
         } else if (jP.jStatus.playmode == jP.jStatus.LIST_LOOP){
             toNext();

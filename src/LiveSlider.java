@@ -15,7 +15,7 @@ public class LiveSlider extends JPanel implements Runnable {
     public double percentage;
     public double total;
     private boolean init;
-    private MediaPlayer now_playing;
+    public MediaPlayer now_playing;
     public JStatus now_status;
     public boolean X_MAIN;
     public Thread sliderUI;

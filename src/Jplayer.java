@@ -334,6 +334,7 @@ public class Jplayer extends JFrame {
             }
         });
 
+        Jplayer that = this;
         mediaPlayer.setOnStopped(new Runnable() {
             @Override
             public void run() {
@@ -342,6 +343,25 @@ public class Jplayer extends JFrame {
 //                ls.setTotal(0);
 //                ls.setPlayer(mediaPlayer);
 //                mediaPlayer.seek();
+                File Song = new File(path);
+                URI uri = Song.toURI();
+                String thePath = uri.toASCIIString();
+                media = new Media(thePath);
+                mediaPlayer = new MediaPlayer(media);
+                contentPane.flashImage(path, theHead.title);
+
+                jStatus.isPlay = true;
+                jStatus.nowPlay = mediaPlayer;
+                mediaPlayer.play();
+                jStatus.isPlay = true;
+
+                ls.now_playing = mediaPlayer;
+                mediaPlayer.setVolume(volBar.now_vol);
+
+                that.repaint();
+                theHead.repaint();
+
+
                 ls.currentAt = 0.0;
                 ls.percentage = 0.0;
 //                ls.total;
