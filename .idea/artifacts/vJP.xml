@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="vJP">
-    <output-path>$PROJECT_DIR$/out/artifacts/vJP</output-path>
-    <root id="archive" name="vJP.jar">
-      <element id="dir-copy" path="$PROJECT_DIR$/src" />
-    </root>
-  </artifact>
-</component>

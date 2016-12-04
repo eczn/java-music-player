@@ -7,6 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="mp3agic-0.8.1" level="project" />
+    <orderEntry type="library" exported="" name="mp3agic-0.8.1" level="project" />
   </component>
 </module>

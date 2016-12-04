@@ -1,2 +1,4 @@
 Manifest-Version: 1.0
+Class-Path: mp3agic-0.8.1.jar/*
+Main-Class: Jplayer
 
