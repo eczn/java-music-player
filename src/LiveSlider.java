@@ -34,7 +34,15 @@ public class LiveSlider extends JPanel implements Runnable {
             try {
                 Thread.sleep(500);
                 if (now_playing != null){
-                    setCurrent(now_playing.getCurrentTime().toSeconds());
+                    Duration now = now_playing.getCurrentTime();
+                    Duration total = now_playing.getTotalDuration();
+
+                    if (now == total){
+                        System.out.println("now == total!, 2stop");
+                        now_playing.stop();
+                    }
+
+                    setCurrent(now.toSeconds());
                 }
             } catch (Exception e){
                 e.printStackTrace();

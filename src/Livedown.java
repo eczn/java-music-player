@@ -1,6 +1,3 @@
-//import java.io.File;
-//import com.sun.media.sound.ModelAbstractChannelMixer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;

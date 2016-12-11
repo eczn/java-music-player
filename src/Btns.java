@@ -1,9 +1,5 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.IOException;
 import java.net.URL;
 
 public class Btns extends JButton {
@@ -40,6 +36,7 @@ public class Btns extends JButton {
 
         repaint();
     }
+
     public boolean firInit;
     @Override
     protected void paintComponent(Graphics g) {

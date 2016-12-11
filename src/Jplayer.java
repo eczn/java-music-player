@@ -1,7 +1,6 @@
 import com.sun.awt.AWTUtilities;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.swing.*;
@@ -194,12 +193,14 @@ public class Jplayer extends JFrame {
         aboutBtn = new Btns(aboutTemp,"pre");
         aboutBtn.setBorder(null);
         aboutBtn.setBounds(495, 280, 60, 60);
+
+        Jplayer that = this;
         aboutBtn.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
-                JFrame temp = new AboutMe();
+                JFrame temp = new AboutMe(that);
                 temp.setVisible(true);
 //                temp.setDefaultCloseOperation();
-                temp.setUndecorated(true);
+//                temp.setUndecorated(true);
 //                this.setDefaultLookAndFeelDecorated(true);
             }
         });

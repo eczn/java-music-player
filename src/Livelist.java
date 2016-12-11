@@ -41,6 +41,7 @@ public class Livelist extends JFrame {
 
             if (file.exists()){
                 System.out.println("以行为单位读取文件内容，一次读一整行：");
+                // 用file构造FileReader 然后再构造为 带缓存的 BufferedReader
                 reader = new BufferedReader(new FileReader(file));
                 String tempString = null;
                 int line = 1;
@@ -55,8 +56,8 @@ public class Livelist extends JFrame {
             } else {
                 System.out.println("文件不存在，故自动创建一个");
                 listSave();
-                FileNotFoundException temp = new FileNotFoundException();
-                throw temp;
+//                FileNotFoundException temp = new FileNotFoundException();
+//                throw temp;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,13 +79,13 @@ public class Livelist extends JFrame {
 
         File file = new File(fileName);
 
-        if (file.exists()){
-
-        }
+//        if (file.exists()){
+//
+//        }
         try {
             PrintWriter output = new PrintWriter(file);
             int i = 0;
-            for (i=0;i<model.getSize();i++){
+            for (i=0;i<model.getSize();i++) {
                 output.println(model.getElementAt(i));
             }
 
