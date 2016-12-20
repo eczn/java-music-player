@@ -1,3 +1,7 @@
+/**
+ * Created by eczn on 2016/12/4.
+ */
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -7,9 +11,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by eczn on 2016/12/4.
- */
 public class Droparea extends Container implements DropTargetListener {
     Jplayer jp;
 
@@ -25,7 +26,6 @@ public class Droparea extends Container implements DropTargetListener {
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
         System.out.println("dragEnter");
-//        jp.theHead.
     }
     @Override
     public void dragExit(DropTargetEvent dte) {
@@ -49,12 +49,26 @@ public class Droparea extends Container implements DropTargetListener {
                                 .getTransferData(DataFlavor.javaFileListFlavor)
                 );
                 Iterator iterator = list.iterator();
+
+
                 while (iterator.hasNext()) {
                     File f = (File) iterator.next();
                     System.out.println("拖入的文件是："+f.getAbsolutePath());
+                    jp.path = f.getAbsolutePath();
+                    jp.livelist.addElem(f.getAbsolutePath());
+                    if (jp.mediaPlayer != null){
+                        jp.thePlay(1); // pause first;
+                        jp.thePlay(0); // and play it;
+                    } else {
+                        jp.thePlay(0); // just play it
+                    }
+
                 }
+
+                jp.livelist.listSave();
+
                 dtde.dropComplete(true);
-                //this.updateUI();
+
             } else {
                 dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 Object drop2here = dtde.getTransferable().getTransferData(DataFlavor.stringFlavor);

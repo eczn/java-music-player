@@ -31,11 +31,8 @@ public class Vol extends Canvas implements Runnable {
 //        volcanvas.repaint();
 //        add(volcanvas);
 //        volcanvas.setBounds(0,0,160,160);
-
-
 //        thread_vol = new Thread(this);
 //        thread_vol.start();
-
 //        this.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseClicked(MouseEvent e) {
@@ -124,6 +121,7 @@ public class Vol extends Canvas implements Runnable {
                 } else if (now_vol <= 0){
                     now_vol = 0;
                 }
+
                 try {
                     jplayer.setMediaPlayerVol(now_vol);
                 } catch (Exception exce){

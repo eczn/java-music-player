@@ -9,8 +9,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -26,9 +26,7 @@ public class ImgPanel extends JPanel {
             default_image = ImageIO.read(url);
             image=default_image;
         } catch (IOException ex) {
-            // do nothing
-            System.out.println(ex);
-
+            ex.printStackTrace();
         }
     }
 
@@ -64,9 +62,8 @@ public class ImgPanel extends JPanel {
             if (mp3file.hasId3v2Tag()) {
                 ID3v2 id3v2Tag = mp3file.getId3v2Tag();
 
-//                title.setText(id3v2Tag.getArtist()+" - "+);
-                String[] tempArr = path.split("/");
-                String MP3FileName = tempArr[tempArr.length-1];
+                File temp = new File(path);
+                String MP3FileName = temp.getName();
 
                 title.setText(id3v2Tag.getArtist() + " - " + MP3FileName);
 
@@ -76,12 +73,11 @@ public class ImgPanel extends JPanel {
                     ByteArrayInputStream in = new ByteArrayInputStream(imageData);
                     //将in作为输入流，读取图片存入image中，而这里in可以为ByteArrayInputStream();
                     BufferedImage target_image = ImageIO.read(in);
-
                     this.setImage(target_image);
                 }
             }
         } catch (UnsupportedTagException | InvalidDataException | IOException e1) {
-//            System.out.println(e1);
+            e1.printStackTrace();
         }
     }
 }

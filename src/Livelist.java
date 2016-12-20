@@ -26,6 +26,7 @@ public class Livelist extends JFrame {
     private Livedown liveDown;
     private boolean isOdd;
     private int now_play_in;
+    public boolean firstLaunch = false;
 
     public void listLoader(){
         vec = new Vector();
@@ -38,7 +39,6 @@ public class Livelist extends JFrame {
         File file = new File(fileName);
         BufferedReader reader = null;
         try {
-
             if (file.exists()){
                 System.out.println("以行为单位读取文件内容，一次读一整行：");
                 // 用file构造FileReader 然后再构造为 带缓存的 BufferedReader
@@ -92,6 +92,13 @@ public class Livelist extends JFrame {
             output.close();
         } catch ( FileNotFoundException fnfe){
             System.out.print(fnfe);
+            File whereJP = new File(usrHome+"/FutureSoft/JP/");
+            File whereLivedown = new File(usrHome+"/FutureSoft/JP/Livedown");
+
+            firstLaunch = true;
+            whereJP.mkdirs();
+            whereLivedown.mkdirs();
+            return;
         }
 
     }
@@ -290,9 +297,7 @@ public class Livelist extends JFrame {
     public void musicEnd(){
         if (jP.jStatus.playmode == jP.jStatus.SINGLE_LOOP){
             jP.mediaPlayer.seek(new Duration(0.0));
-            jP.mediaPlayer.stop();
-
-
+//            jP.mediaPlayer.stop();
         } else if (jP.jStatus.playmode == jP.jStatus.LIST_LOOP){
             toNext();
         } else if (jP.jStatus.playmode == jP.jStatus.RANDOM_LOOP){

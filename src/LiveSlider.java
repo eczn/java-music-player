@@ -15,31 +15,31 @@ public class LiveSlider extends JPanel implements Runnable {
     public double percentage;
     public double total;
     private boolean init;
-    public MediaPlayer now_playing;
+//    public MediaPlayer now_playing;
+    public Jplayer jp;
     public JStatus now_status;
     public boolean X_MAIN;
     public Thread sliderUI;
 
-
     @Override
     public void run(){
-//        now_playing
-
-        while(true){
-            System.out.println("total: "+total);
+//        while(true){
+            System.out.println(total);
             System.out.println("currentAt: "+currentAt);
             System.out.println("percentage: "+percentage);
             System.out.println();
 
             try {
                 Thread.sleep(500);
-                if (now_playing != null){
-                    Duration now = now_playing.getCurrentTime();
-                    Duration total = now_playing.getTotalDuration();
+                if (jp.mediaPlayer != null){
+                    Duration now = jp.mediaPlayer.getCurrentTime();
+                    Duration total = jp.mediaPlayer.getTotalDuration();
 
-                    if (now == total){
-                        System.out.println("now == total!, 2stop");
-                        now_playing.stop();
+                    if (now.toString() == "NaN"){
+//                        System.out.println("now == total!, 2stop");
+//                        jp.mediaPlayer.stop();
+                        jp.mediaPlayer.pause();
+                        jp.mediaPlayer.play();
                     }
 
                     setCurrent(now.toSeconds());
@@ -47,7 +47,9 @@ public class LiveSlider extends JPanel implements Runnable {
             } catch (Exception e){
                 e.printStackTrace();
             }
-        }
+//        }
+
+        run();
     }
 
     public LiveSlider(){
@@ -57,8 +59,9 @@ public class LiveSlider extends JPanel implements Runnable {
         width = 0;
         mouseInit();
     }
-    public LiveSlider(int W, int H, boolean X){
+    public LiveSlider(int W, int H, boolean X, Jplayer JP){
         super();
+        jp = JP;
         init = true;
         height = H;
         width = W;
@@ -69,9 +72,9 @@ public class LiveSlider extends JPanel implements Runnable {
         sliderUI.start();
     }
 
-    public void setPlayer(MediaPlayer P){
-        now_playing = P;
-    }
+//    public void setPlayer(MediaPlayer P){
+//        now_playing = P;
+//    }
 
     public void setCurrent(double c){
         currentAt = c;
@@ -129,14 +132,10 @@ public class LiveSlider extends JPanel implements Runnable {
     private void mouseInit(){
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-//                onEvent = true;
-
                 if (now_status.isPlay){
                     percentage = (e.getX() / (double)width);
-                    now_playing.seek(new Duration(total * percentage * 1000));
+                    jp.mediaPlayer.seek(new Duration(total * percentage * 1000));
                 }
-                // Jp
-//                onEvent = false;
                 repaint();
             }
         });

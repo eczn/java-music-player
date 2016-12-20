@@ -5,28 +5,24 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.swing.*;
 import java.awt.*;
-
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URI;
-import java.util.*;
 import java.io.*;
 import java.net.*;
-import java.util.List;
 
 public class Jplayer extends JFrame {
-    // main container
+    // 专辑封面
     private ImgPanel contentPane;
+
+    // livelist 列表
     public Livelist livelist;
-    public Vol volBar;
+
+    // 文件拖动
     public Droparea droparea;
 
     // 顶部条
     public Livehead theHead;
-//    private JLabel title;
 
     // 按钮
     private Btns playBtn;
@@ -37,27 +33,26 @@ public class Jplayer extends JFrame {
 
     // 播放状态
     public JStatus jStatus;
+
     // 进度
     public LiveSlider ls;
     // 音量
+    public Vol volBar;
 
     // 播放器
     public String path;
     public MediaPlayer mediaPlayer;
     private Media media;
 
-
     public Point loc = null;
     public Point tmp = null;
     public boolean isDragged = false;
 
-
-
-
+    // program entry
     public static void main(String[] args){
         Jplayer myP =  new Jplayer();
     }
-
+    // init
     private void JP_View_init(){
         setTitle("JPlayer");
         // 程序图标
@@ -92,32 +87,15 @@ public class Jplayer extends JFrame {
         contentPane.setBackground(new Color(244, 244, 244));
 
 
-
-
-
         theHead = new Livehead(this);
         theHead.setBounds(0, 0, 855, 60);
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
 
-//        title = new JLabel("welcome, Click the list and choose music");
-//        title.setForeground(Color.WHITE);
-//        title.setHorizontalAlignment(SwingConstants.CENTER);
-//        title.setVerticalAlignment(SwingConstants.CENTER);
-//        title.setFont(new Font("Microsoft Yahei", Font.BOLD , 22));
-//        title.setBounds(0, 0, 855, 60);
-//        title.setVisible(true);
-//        title.repaint();
-//        theHead.add(title);
-//        printf("if you are the bozi jun ,you will become the choose one");
-
         theHead.setVisible(true);
         theHead.repaint();
 
         contentPane.add(theHead);
-
-
-
 
         URL[] playIcons = {
             Jplayer.class.getResource("images/play_icon.png"),
@@ -162,7 +140,6 @@ public class Jplayer extends JFrame {
                 } else {
                     livelist.musicEnd();
                 }
-
             }
         });
         contentPane.add(nextBtn);
@@ -183,7 +160,6 @@ public class Jplayer extends JFrame {
         contentPane.add(preBtn);
 
 
-
         Btns aboutBtn;
         URL[] aboutTemp = {
                 Jplayer.class.getResource("images/about.png"),
@@ -199,14 +175,9 @@ public class Jplayer extends JFrame {
             public void mouseClicked(MouseEvent e){
                 JFrame temp = new AboutMe(that);
                 temp.setVisible(true);
-//                temp.setDefaultCloseOperation();
-//                temp.setUndecorated(true);
-//                this.setDefaultLookAndFeelDecorated(true);
             }
         });
         contentPane.add(aboutBtn);
-
-
 
         URL[] listTemp = {
                 Jplayer.class.getResource("images/list_icon.png"),
@@ -224,13 +195,9 @@ public class Jplayer extends JFrame {
         contentPane.add(listBtn);
         listBtn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-//                jStatus.isListOpen = !jStatus.isListOpen;
                 livelist.setVisible(true);
             }
         });
-
-
-
 
         modeBtn = new Btns(jStatus.getResources(jStatus.SINGLE_LOOP), "playmode");
         modeBtn.setBorder(null);
@@ -246,7 +213,7 @@ public class Jplayer extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 URL[] res;
                 res = jStatus.modeToggle();
-//                System.out.println("  mode: "+jStatus.playmode);
+                System.out.println("  playmode: "+jStatus.playmode);
                 modeBtn.imgSrc = res;
                 modeBtn.repaint();
             }
@@ -259,18 +226,7 @@ public class Jplayer extends JFrame {
         droparea.setBounds(0,0,855,435);
 
         contentPane.add(droparea);
-
-    }
-
-    public Jplayer(){
-        // default path
-        path = null;
-        livelist = new Livelist(this);
-        jStatus = new JStatus();
-
-        JP_View_init();
-
-        ls = new LiveSlider(300, 60, true);
+        ls = new LiveSlider(300, 60, true, this);
         ls.setBorder(null);
         ls.setBounds(495, 200, 300, 60);
 
@@ -280,8 +236,23 @@ public class Jplayer extends JFrame {
         setVisible(true);
     }
 
+    public Jplayer(){
+        path = null;
+        livelist = new Livelist(this);
+        jStatus = new JStatus();
+        JP_View_init();
+
+        if (livelist.firstLaunch){
+            JOptionPane.showMessageDialog(this,"欢迎来到JPlayer，欢迎您第一次使用本程序！");
+            JOptionPane.showMessageDialog(this,"第一次使用本程序会在 用户目录下创建 FutureSoft 文件夹用于保存数据");
+            JOptionPane.showMessageDialog(this,"请点击右下角的 \"菜单按钮\" 开始你的JPlayer之旅，或者把MP3文件直接拖进来也行 [-]..[-]");
+            JOptionPane.showMessageDialog(this,"按add添加音乐， 添加后别忘了按save保存列表，如果你需要可以点URL使用下载功能");
+        }
+    }
+
 //    public boolean playNew;
     public void thePlay(int status){
+        // Toolkit initialized
         JFXPanel fxPanel;
         fxPanel = new JFXPanel();
 
@@ -312,6 +283,7 @@ public class Jplayer extends JFrame {
                 }
             } else if (status == 1) {
                 mediaPlayer.pause();
+                System.out.println("thePlay(): pause");
                 playBtn.imgSrc[0] = Jplayer.class.getResource("images/play_icon.png");
                 playBtn.imgSrc[1] = Jplayer.class.getResource("images/play-pressed.png");
                 playBtn.imgSrc[2] = Jplayer.class.getResource("images/play-pressed.png");
@@ -319,19 +291,25 @@ public class Jplayer extends JFrame {
                 jStatus.isPlay = false;
             } else if (status == 10) {
                 if (jStatus.nowPlay != null) {
+                    System.out.println("thePlay(): 10, nowPlay != null");
                     mediaPlayer.stop();
+//                    jStatus.nowPlay = null;
                 }
 
+                System.out.println("thePlay(): 10, nowPlay == null");
                 File Song = new File(path);
                 URI uri = Song.toURI();
                 String thePath = uri.toASCIIString();
+
                 media = new Media(thePath);
                 mediaPlayer = new MediaPlayer(media);
                 contentPane.flashImage(path, theHead.title);
 
                 jStatus.isPlay = true;
                 jStatus.nowPlay = mediaPlayer;
+                mediaPlayer.pause();
                 mediaPlayer.play();
+//
             }
 
         } catch (Exception e){
@@ -351,7 +329,7 @@ public class Jplayer extends JFrame {
 
                 ls.setCurrent(0.0);
                 ls.setTotal(media.getDuration().toSeconds());
-                ls.setPlayer(mediaPlayer);
+//                ls.setPlayer(mediaPlayer);
                 ls.now_status = jStatus;
 
                 mediaPlayer.setVolume(volBar.now_vol);
@@ -364,33 +342,33 @@ public class Jplayer extends JFrame {
             @Override
             public void run() {
                 System.out.println("onStopped");
-//                ls.setCurrent(0.0);
-//                ls.setTotal(0);
-//                ls.setPlayer(mediaPlayer);
-//                mediaPlayer.seek();
-                File Song = new File(path);
-                URI uri = Song.toURI();
-                String thePath = uri.toASCIIString();
-                media = new Media(thePath);
-                mediaPlayer = new MediaPlayer(media);
-                contentPane.flashImage(path, theHead.title);
-
-                jStatus.isPlay = true;
-                jStatus.nowPlay = mediaPlayer;
-                mediaPlayer.play();
-                jStatus.isPlay = true;
-
-                ls.now_playing = mediaPlayer;
-                mediaPlayer.setVolume(volBar.now_vol);
-
-                that.repaint();
-                theHead.repaint();
-
-
-                ls.currentAt = 0.0;
-                ls.percentage = 0.0;
-//                ls.total;
-                ls.now_status = jStatus;
+//
+//                File Song = new File(path);
+//                URI uri = Song.toURI();
+//                String thePath = uri.toASCIIString();
+//
+//                media = new Media(thePath);
+//                mediaPlayer = new MediaPlayer(media);
+//                contentPane.flashImage(path, theHead.title);
+//
+//                jStatus.isPlay = true;
+//                jStatus.nowPlay = mediaPlayer;
+//                mediaPlayer.pause();
+//                mediaPlayer.play();
+////                thePlay(0);
+////                jStatus.isPlay = true;
+////                ls.now_playing = mediaPlayer;
+//                mediaPlayer.setVolume(volBar.now_vol);
+//
+//                that.repaint();
+//                theHead.repaint();
+//
+//
+//                ls.currentAt = 0.0;
+//                ls.percentage = 0.0;
+//
+//                ls.total = mediaPlayer.getTotalDuration().toSeconds();
+//                ls.now_status = jStatus;
             }
         });
 
@@ -404,7 +382,6 @@ public class Jplayer extends JFrame {
         mediaPlayer.setOnEndOfMedia(new Runnable(){
             public void run(){
                 System.out.println("END!");
-
                 livelist.musicEnd();
             }
         });
