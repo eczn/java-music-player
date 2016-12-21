@@ -7,17 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ccdefa34-8c8d-4233-a4f6-e3820ef74671" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AboutMe.java" afterPath="$PROJECT_DIR$/src/AboutMe.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Btns.java" afterPath="$PROJECT_DIR$/src/Btns.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Droparea.java" afterPath="$PROJECT_DIR$/src/Droparea.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ImgPanel.java" afterPath="$PROJECT_DIR$/src/ImgPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/JStatus.java" afterPath="$PROJECT_DIR$/src/JStatus.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Jplayer.java" afterPath="$PROJECT_DIR$/src/Jplayer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/LiveSlider.java" afterPath="$PROJECT_DIR$/src/LiveSlider.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Livedown.java" afterPath="$PROJECT_DIR$/src/Livedown.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Livehead.java" afterPath="$PROJECT_DIR$/src/Livehead.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Livelist.java" afterPath="$PROJECT_DIR$/src/Livelist.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Vol.java" afterPath="$PROJECT_DIR$/src/Vol.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="Java-MP3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -155,8 +146,8 @@
       <file leaf-file-name="AboutMe.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AboutMe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="419">
-              <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+            <state relative-caret-position="287">
+              <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
@@ -309,24 +300,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="AboutMe.java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Java-MP3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Java-MP3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mp3agic-0.8.1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1234,8 +1207,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AboutMe.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+        <state relative-caret-position="287">
+          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
