@@ -5,28 +5,30 @@ import java.net.URL;
 public class Btns extends JButton {
     // "imgSrc" have 3 image URLs
     // just like this:
-    // imgSrc[0]: normal Status Icon src
-    // imgSrc[1]: onClicked Status Icon src
-    // imgSrc[2]: Hover Status Icon src
-
+    // imgSrc[0]: 图标的正常状态
+    // imgSrc[1]: 图标被点击
+    // imgSrc[2]: 鼠标悬停在图片上
     protected URL[] imgSrc;
     public String btnName;
     public boolean justText;
+    public boolean firInit;
 
-    public Btns() { // construtor
+    // 测试用
+    public Btns() {
         btnName = "btn";
         justText = false;
         this.setBorder(null);
     }
 
+    // 测试用
     public Btns(String text){
         super(text);
         btnName = text;
         justText = true;
     }
 
+    // 主构造器
     public Btns(URL[] ImageSrc_output, String text){
-//        super(text);
         btnName = text;
         imgSrc = ImageSrc_output;
         justText = false;
@@ -37,45 +39,47 @@ public class Btns extends JButton {
         repaint();
     }
 
-    public boolean firInit;
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        // 如果这个图标仅仅是文字图标 则直接绘制字符串
         if (justText){
             g.drawString(btnName, 0,0);
-        } else {
+        } else { // 不然的话要渲染图标
             ButtonModel model = getModel();
 
+            // 如果按钮这时候被点击
             if (model.isPressed()) {
                 Color c = new Color(0,0,0);
                 g.setColor(c);
-
+                // 利用toolkit绘图
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[1]);
 
                 g.drawImage(image, 0, 0, null);
 
-            } else {
+            } else { // 没被点击
                 Color c = new Color(120,120,120);
                 g.setColor(c);
-
+                // 利用toolkit绘图
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[0]);
                 g.drawImage(image, 0, 0, new Color(255,255,255), null);
-//                g.drawImage(image, 0, 0, null);
             }
 
+            // 此外，如果你鼠标悬停
             if (model.isRollover()){ // hover
                 Color c = new Color(0,0,0);
                 g.setColor(c);
+                // 利用toolkit绘图
                 Toolkit tool = this.getToolkit();
                 Image image = tool.getImage(imgSrc[2]);
                 g.drawImage(image, 0, 0, null);
-
             }
         }
 
+        // 第一次初始化的时候应该要重绘一次 以免JButton的背景覆盖住本Btns
         if (firInit){
             repaint();
             g.clearRect(0,0,60,60);

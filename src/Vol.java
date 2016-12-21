@@ -14,33 +14,17 @@ public class Vol extends Canvas implements Runnable {
     public int width;
     public int height;
     public boolean isPressed;
-    Thread thread_vol;
 
     public Vol(Jplayer JPLAYER){
         super();
         jplayer = JPLAYER;
-//        mp = mediaplayer;
         now_vol = 1.0;
         height = 40;
         System.out.println("!@#$!: "+getSize().getWidth());
-//        now_at = (int)(this.getSize().getWidth());
         now_at = 420;
         width = 420;
         setBackground(new Color(255,255,255));
-//        volcanvas = new Volcanvas();
-//        volcanvas.repaint();
-//        add(volcanvas);
-//        volcanvas.setBounds(0,0,160,160);
-//        thread_vol = new Thread(this);
-//        thread_vol.start();
-//        this.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                now_vol = e.getX() / (double)width;
-//                System.out.print("now_vol: ");
-//                System.out.println(now_vol);
-//            }
-//        });
+
         repaint();
         this.addMouseListener(new MouseAdapter() {
             @Override

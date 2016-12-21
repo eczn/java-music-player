@@ -2,7 +2,6 @@ import com.sun.awt.AWTUtilities;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -44,6 +43,7 @@ public class Jplayer extends JFrame {
     public MediaPlayer mediaPlayer;
     private Media media;
 
+    public Jplayer that = this;
     public Point loc = null;
     public Point tmp = null;
     public boolean isDragged = false;
@@ -78,31 +78,26 @@ public class Jplayer extends JFrame {
 
         contentPane = new ImgPanel();
 
-
-
         Container jp = getContentPane();
         jp.add(contentPane);
-
         contentPane.setLayout(null);
         contentPane.setBackground(new Color(244, 244, 244));
 
-
+        // 标题栏
         theHead = new Livehead(this);
         theHead.setBounds(0, 0, 855, 60);
         theHead.setBackground(new Color(0, 0, 0, 183));
         theHead.setLayout(null);
-
         theHead.setVisible(true);
         theHead.repaint();
-
         contentPane.add(theHead);
 
+        // 播放/暂停按钮
         URL[] playIcons = {
             Jplayer.class.getResource("images/play_icon.png"),
             Jplayer.class.getResource("images/play-pressed.png"),
             Jplayer.class.getResource("images/play-pressed.png")
         };
-
         playBtn = new Btns(playIcons,"play");
         playBtn.setSize(60, 60);
         playBtn.setVisible(true);
@@ -125,6 +120,7 @@ public class Jplayer extends JFrame {
 
         contentPane.add(playBtn);
 
+        // 下一首
         URL[] nextTemp = {
                 Jplayer.class.getResource("images/next_icon.png"),
                 Jplayer.class.getResource("images/next-pressed.png"),
@@ -144,6 +140,7 @@ public class Jplayer extends JFrame {
         });
         contentPane.add(nextBtn);
 
+        // 上一首
         URL[] preTemp = {
                 Jplayer.class.getResource("images/pre_icon.png"),
                 Jplayer.class.getResource("images/pre-pressed.png"),
@@ -159,7 +156,7 @@ public class Jplayer extends JFrame {
         });
         contentPane.add(preBtn);
 
-
+        // 关于我
         Btns aboutBtn;
         URL[] aboutTemp = {
                 Jplayer.class.getResource("images/about.png"),
@@ -179,6 +176,7 @@ public class Jplayer extends JFrame {
         });
         contentPane.add(aboutBtn);
 
+        // 列表按钮
         URL[] listTemp = {
                 Jplayer.class.getResource("images/list_icon.png"),
                 Jplayer.class.getResource("images/list-pressed.png"),
@@ -199,6 +197,7 @@ public class Jplayer extends JFrame {
             }
         });
 
+        // 模式选择按钮
         modeBtn = new Btns(jStatus.getResources(jStatus.SINGLE_LOOP), "playmode");
         modeBtn.setBorder(null);
         modeBtn.setBounds(685, 280, 60, 60);
@@ -219,13 +218,17 @@ public class Jplayer extends JFrame {
             }
         });
 
+        // 音量条
         volBar = new Vol(this);
         volBar.setBounds(435, 355, 420, 160);
         contentPane.add(volBar);
+
+        // droparea 是可拖放区域，占据整个程序窗口 （透明）
         droparea = new Droparea(this);
         droparea.setBounds(0,0,855,435);
-
         contentPane.add(droparea);
+
+        // 进度条
         ls = new LiveSlider(300, 60, true, this);
         ls.setBorder(null);
         ls.setBounds(495, 200, 300, 60);
@@ -236,12 +239,17 @@ public class Jplayer extends JFrame {
         setVisible(true);
     }
 
+    // 程序入口
     public Jplayer(){
+        // 值的初始化
         path = null;
         livelist = new Livelist(this);
         jStatus = new JStatus();
+
+        // 图形初始化
         JP_View_init();
 
+        // 第一次使用本程序
         if (livelist.firstLaunch){
             JOptionPane.showMessageDialog(this,"欢迎来到JPlayer，欢迎您第一次使用本程序！");
             JOptionPane.showMessageDialog(this,"第一次使用本程序会在 用户目录下创建 FutureSoft 文件夹用于保存数据");
@@ -250,12 +258,12 @@ public class Jplayer extends JFrame {
         }
     }
 
-//    public boolean playNew;
     public void thePlay(int status){
-        // Toolkit initialized
+        // Toolkit 初始化
         JFXPanel fxPanel;
         fxPanel = new JFXPanel();
 
+        // 把图标图片换为暂停
         playBtn.imgSrc[0] = Jplayer.class.getResource("images/pause_icon.png");
         playBtn.imgSrc[1] = Jplayer.class.getResource("images/pause_pressed.png");
         playBtn.imgSrc[2] = Jplayer.class.getResource("images/pause_pressed.png");
@@ -284,6 +292,7 @@ public class Jplayer extends JFrame {
             } else if (status == 1) {
                 mediaPlayer.pause();
                 System.out.println("thePlay(): pause");
+                // 把图标图片换为播放
                 playBtn.imgSrc[0] = Jplayer.class.getResource("images/play_icon.png");
                 playBtn.imgSrc[1] = Jplayer.class.getResource("images/play-pressed.png");
                 playBtn.imgSrc[2] = Jplayer.class.getResource("images/play-pressed.png");
@@ -293,7 +302,6 @@ public class Jplayer extends JFrame {
                 if (jStatus.nowPlay != null) {
                     System.out.println("thePlay(): 10, nowPlay != null");
                     mediaPlayer.stop();
-//                    jStatus.nowPlay = null;
                 }
 
                 System.out.println("thePlay(): 10, nowPlay == null");
@@ -309,11 +317,11 @@ public class Jplayer extends JFrame {
                 jStatus.nowPlay = mediaPlayer;
                 mediaPlayer.pause();
                 mediaPlayer.play();
-//
             }
 
         } catch (Exception e){
             e.printStackTrace();
+            // 把图标图片换为播放
             playBtn.imgSrc[0] = Jplayer.class.getResource("images/play_icon.png");
             playBtn.imgSrc[1] = Jplayer.class.getResource("images/play-pressed.png");
             playBtn.imgSrc[2] = Jplayer.class.getResource("images/play-pressed.png");
@@ -322,75 +330,40 @@ public class Jplayer extends JFrame {
             return;
         }
 
+        // 当执行 .play的时候
         mediaPlayer.setOnPlaying(new Runnable(){
             @Override
             public void run() {
-                Duration time_left;
-
+                // 进度条位置清空
                 ls.setCurrent(0.0);
+                // 设置总长度
                 ls.setTotal(media.getDuration().toSeconds());
-//                ls.setPlayer(mediaPlayer);
+                // 设置ls需要的JStatus
                 ls.now_status = jStatus;
-
+                // 音量初始化
                 mediaPlayer.setVolume(volBar.now_vol);
-
             }
         });
-
-        Jplayer that = this;
-        mediaPlayer.setOnStopped(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("onStopped");
-//
-//                File Song = new File(path);
-//                URI uri = Song.toURI();
-//                String thePath = uri.toASCIIString();
-//
-//                media = new Media(thePath);
-//                mediaPlayer = new MediaPlayer(media);
-//                contentPane.flashImage(path, theHead.title);
-//
-//                jStatus.isPlay = true;
-//                jStatus.nowPlay = mediaPlayer;
-//                mediaPlayer.pause();
-//                mediaPlayer.play();
-////                thePlay(0);
-////                jStatus.isPlay = true;
-////                ls.now_playing = mediaPlayer;
-//                mediaPlayer.setVolume(volBar.now_vol);
-//
-//                that.repaint();
-//                theHead.repaint();
-//
-//
-//                ls.currentAt = 0.0;
-//                ls.percentage = 0.0;
-//
-//                ls.total = mediaPlayer.getTotalDuration().toSeconds();
-//                ls.now_status = jStatus;
-            }
-        });
-
+        // 错误的时候
         mediaPlayer.setOnError(new Runnable() {
             @Override
             public void run() {
                 System.out.println("media error");
             }
         });
-
+        // 到达音频结尾的时候
         mediaPlayer.setOnEndOfMedia(new Runnable(){
             public void run(){
                 System.out.println("END!");
+                // 根据模式来选择下一首应该播什么
                 livelist.musicEnd();
             }
         });
-
         this.repaint();
     }
 
+    // 设置音量
     public void setMediaPlayerVol(Double vol){
         mediaPlayer.setVolume(vol);
     }
-
 }

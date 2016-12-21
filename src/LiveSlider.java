@@ -1,7 +1,6 @@
 /**
  * Created by eczn on 2016/11/16.
  */
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.swing.*;
 import java.awt.*;
@@ -9,21 +8,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class LiveSlider extends JPanel implements Runnable {
+    // 基本参数
     private int height;
     private int width;
     public double currentAt;
     public double percentage;
     public double total;
     private boolean init;
-//    public MediaPlayer now_playing;
     public Jplayer jp;
     public JStatus now_status;
     public boolean X_MAIN;
     public Thread sliderUI;
 
-    @Override
+    @Override // Runnable 轮询
     public void run(){
-//        while(true){
+        while (true){ // 轮询的实现
             System.out.println(total);
             System.out.println("currentAt: "+currentAt);
             System.out.println("percentage: "+percentage);
@@ -36,8 +35,6 @@ public class LiveSlider extends JPanel implements Runnable {
                     Duration total = jp.mediaPlayer.getTotalDuration();
 
                     if (now.toString() == "NaN"){
-//                        System.out.println("now == total!, 2stop");
-//                        jp.mediaPlayer.stop();
                         jp.mediaPlayer.pause();
                         jp.mediaPlayer.play();
                     }
@@ -47,11 +44,9 @@ public class LiveSlider extends JPanel implements Runnable {
             } catch (Exception e){
                 e.printStackTrace();
             }
-//        }
-
-        run();
+        }
     }
-
+    // 测试用的构造器
     public LiveSlider(){
         super();
         init = true;
@@ -59,6 +54,7 @@ public class LiveSlider extends JPanel implements Runnable {
         width = 0;
         mouseInit();
     }
+    // 构造器
     public LiveSlider(int W, int H, boolean X, Jplayer JP){
         super();
         jp = JP;
@@ -72,20 +68,18 @@ public class LiveSlider extends JPanel implements Runnable {
         sliderUI.start();
     }
 
-//    public void setPlayer(MediaPlayer P){
-//        now_playing = P;
-//    }
-
+    // 设置当前播放进度
     public void setCurrent(double c){
         currentAt = c;
         percentage = currentAt / total;
         repaint();
     }
-
+    // 设置总播放进度
     public void setTotal(double t){
         total = t;
     }
 
+    // 测试用main方法
     public static void main(String[] args){
         Frame fr = new Frame();
         LiveSlider ls = new LiveSlider();
@@ -98,7 +92,7 @@ public class LiveSlider extends JPanel implements Runnable {
         fr.repaint();
     }
 
-    @Override
+    @Override // 重写JPanel的绘制方法
     protected void paintComponent(Graphics g) {
         g.clearRect(0,0,width,height);
         g.setColor(new Color(233,233,233));
@@ -112,7 +106,6 @@ public class LiveSlider extends JPanel implements Runnable {
         g.setColor(new Color(173,180,194));
 
         double temp = percentage * width;
-//        System.out.println(temp);
 
         if (X_MAIN){
             g.fillRect(0,20,(int)temp,height-50);
@@ -128,7 +121,7 @@ public class LiveSlider extends JPanel implements Runnable {
 
     }
 
-    public boolean onEvent;
+    // 鼠标点击事件绑定，点击某处立即跳转到该处
     private void mouseInit(){
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

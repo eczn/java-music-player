@@ -1,23 +1,20 @@
-import javafx.embed.swing.JFXPanel;
 import javafx.util.Duration;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.net.*;
 import java.util.Vector;
 
 public class Livelist extends JFrame {
+    // 基本量
     public JList list;
     public Vector<String> vec;
+    public Jplayer jP;
+    public int select_on;
+    // 链表
     DefaultListModel<String> model;
-
+    // 私有UI组件
     private ImgPanel contentPane;
     private JButton listAdd;
     private JButton listSave;
@@ -28,18 +25,20 @@ public class Livelist extends JFrame {
     private int now_play_in;
     public boolean firstLaunch = false;
 
+    // 读文件，文件不存在则创建并通知JPlayer 这是第一次启动JPlayer
     public void listLoader(){
         vec = new Vector();
         model = new DefaultListModel<>();
         String fileName;
 
+        // 用户目录
         String usrHome = System.getProperty("user.home");
         fileName = usrHome+"/FutureSoft/JP/LiveList.data";
 
         File file = new File(fileName);
         BufferedReader reader = null;
         try {
-            if (file.exists()){
+            if (file.exists()){ // 文件存在
                 System.out.println("以行为单位读取文件内容，一次读一整行：");
                 // 用file构造FileReader 然后再构造为 带缓存的 BufferedReader
                 reader = new BufferedReader(new FileReader(file));
@@ -53,15 +52,13 @@ public class Livelist extends JFrame {
                     line++;
                 }
                 reader.close();
-            } else {
+            } else { // 文件不存在
                 System.out.println("文件不存在，故自动创建一个");
                 listSave();
-//                FileNotFoundException temp = new FileNotFoundException();
-//                throw temp;
             }
-        } catch (IOException e) {
+        } catch (IOException e) { // 异常
             e.printStackTrace();
-        } finally {
+        } finally { // 在try之后 解除文件占用
             if (reader != null) {
                 try {
                     reader.close();
@@ -72,6 +69,7 @@ public class Livelist extends JFrame {
         }
     }
 
+    // 保存列表文件 路径不存在会自动创建
     public void listSave(){
         String usrHome = System.getProperty("user.home");
         String fileName;
@@ -79,30 +77,29 @@ public class Livelist extends JFrame {
 
         File file = new File(fileName);
 
-//        if (file.exists()){
-//
-//        }
         try {
             PrintWriter output = new PrintWriter(file);
             int i = 0;
             for (i=0;i<model.getSize();i++) {
                 output.println(model.getElementAt(i));
             }
-
             output.close();
         } catch ( FileNotFoundException fnfe){
             System.out.print(fnfe);
+            // JP所在
             File whereJP = new File(usrHome+"/FutureSoft/JP/");
+            // Livedown所在
             File whereLivedown = new File(usrHome+"/FutureSoft/JP/Livedown");
-
-            firstLaunch = true;
             whereJP.mkdirs();
             whereLivedown.mkdirs();
+            // 通知JPlayer提示用户“这是第一次使用JPlayer”
+            firstLaunch = true;
             return;
         }
 
     }
 
+    // 测试用
     public Livelist(){
         vec = new Vector();
         liveDown = new Livedown();
@@ -110,37 +107,31 @@ public class Livelist extends JFrame {
         now_play_in = 0;
     }
 
-    public Jplayer jP;
-    public int select_on;
+    // 构造器 用Jplayer类构造
     public Livelist(Jplayer jP_input){
         jP = jP_input;
         liveDown = new Livedown();
         select_on = -1;
         listLoader();
 
+        // 利用model构造JList
         list = new JList<>(model);
         isOdd = true;
 
         JScrollPane jsp = new JScrollPane(list);
-
+        // 标题
         setTitle("Live-List");
-
         setVisible(false);
-
         setResizable(false);
-
         setBounds(300, 200, 400, 450);
-
-        // !!
         setContentPane(jsp);
 
+        // 鼠标监听
         list.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent mouseEvent) {
                 JList theList = (JList) mouseEvent.getSource();
-//                System.out.println("### "+ mouseEvent.get);
                 int index = theList.locationToIndex(mouseEvent.getPoint());
                 if (mouseEvent.getClickCount() == 2) {
-//                    System.out.println("### index: "+ index);
                     if (index>=0){
                         jP.path = model.getElementAt(index);
                         jP.thePlay(10);
@@ -153,8 +144,7 @@ public class Livelist extends JFrame {
         });
         setBackground(Color.WHITE);
 
-
-
+        // 按钮 添加
         listAdd = new JButton("+ add");
         listAdd.setBounds(0, 390, 80, 30);
         listAdd.setHorizontalAlignment(SwingConstants.CENTER);
@@ -186,7 +176,7 @@ public class Livelist extends JFrame {
         list.setVisible(true);
         list.repaint();
 
-//        listSave = new Btns("| save");
+        // 按钮保存
         listSave = new JButton("↓ save");
         listSave.setBounds(80, 390, 80, 30);
         listSave.setHorizontalAlignment(SwingConstants.CENTER);
@@ -204,7 +194,7 @@ public class Livelist extends JFrame {
 
         Livelist Livelist_temp = this;
 
-
+        // 按钮 URL下载
         listURL = new JButton("+ URL");
         listURL.setBounds(160, 390, 80, 30);
         listURL.setHorizontalAlignment(SwingConstants.CENTER);
@@ -227,6 +217,7 @@ public class Livelist extends JFrame {
         list.add(listURL);
         list.repaint();
 
+        // 按钮 删除
         listDel = new JButton("- del");
         listDel.setBounds(240, 390, 80, 30);
         listDel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -235,7 +226,6 @@ public class Livelist extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (select_on >= 0){
-//                    System.out.println(select_on);
                     model.removeElementAt(select_on);
                 }
 
@@ -248,30 +238,33 @@ public class Livelist extends JFrame {
 
     }
 
+    // 向列表添加元素到底部
     public void addElem(String target){
         model.addElement(target);
     }
 
+    // 循环下一首
     public void toNext(){
         now_play_in++;
         if (now_play_in > model.getSize()-1){
             now_play_in = 0;
-//            return;
         }
         jP.path = model.getElementAt(now_play_in);
         jP.thePlay(10);
 
     }
+
+    // 循环上一首
     public void toPre(){
         now_play_in--;
         if (now_play_in < 0){
             now_play_in = model.getSize()-1;
-//            return;
         }
         jP.path = model.getElementAt(now_play_in);
         jP.thePlay(10);
-
     }
+
+    // 随机
     public void toRandom(){
         int temp = now_play_in;
         int rand = (int)(Math.random() * model.getSize());
@@ -294,15 +287,14 @@ public class Livelist extends JFrame {
 
     }
 
+    // Jplayer会调用这个 并用这个来判断播放模式并选择 是toNext 还是toPre 或者toRandom
     public void musicEnd(){
-        if (jP.jStatus.playmode == jP.jStatus.SINGLE_LOOP){
+        if (jP.jStatus.playmode == jP.jStatus.SINGLE_LOOP){ // 单曲循环
             jP.mediaPlayer.seek(new Duration(0.0));
-//            jP.mediaPlayer.stop();
-        } else if (jP.jStatus.playmode == jP.jStatus.LIST_LOOP){
+        } else if (jP.jStatus.playmode == jP.jStatus.LIST_LOOP){ // 列表循环
             toNext();
-        } else if (jP.jStatus.playmode == jP.jStatus.RANDOM_LOOP){
+        } else if (jP.jStatus.playmode == jP.jStatus.RANDOM_LOOP){ // 随机播放
             toRandom();
         }
     }
-
 }
